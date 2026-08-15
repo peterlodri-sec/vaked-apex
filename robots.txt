@@ -1,34 +1,12 @@
-# vaked.dev — Sovereign Constellation Robots Standard
-# Author: Peter Lodri (@0xp3t3rl)
-# LLM Architecture: https://vaked.dev/llms.txt
-
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: PerplexityBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+User-agent: Bytespider
+Disallow: /
 User-agent: *
 Allow: /
-Allow: /whitepaper.html
-Allow: /llms.txt
-Allow: /llms-full.txt
-Allow: /.well-known/
-
-# Specific friendly research indexing
-User-agent: GPTBot
-Allow: /
-Allow: /llms.txt
-
-User-agent: ClaudeBot
-Allow: /
-Allow: /llms.txt
-
-User-agent: PerplexityBot
-Allow: /
-Allow: /llms.txt
-
-User-agent: Applebot
-Allow: /
-Allow: /llms.txt
-
-User-agent: Googlebot
-Allow: /
-Allow: /llms.txt
-
-Sitemap: https://vaked.dev/sitemap.xml
-Host: https://vaked.dev
