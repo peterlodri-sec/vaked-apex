@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Deploy the VAKED token — a friendly guide</title>
+<style>
+  :root {
+    --bg:        #0a0e14;
+    --bg-soft:   #0d131c;
+    --panel:     #101722;
+    --panel-2:   #0f151d;
+    --border:    #1c2733;
+    --border-hi: #2a3a4c;
+    --text:      #c9d1d9;
+    --text-dim:  #8b949e;
+    --heading:   #e6edf3;
+    --accent:    #58a6ff;
+    --amber:     #d29922;
+    --green:     #3fb950;
+    --red:       #f85149;
+    --code-bg:   #0a0f16;
+    --radius:    14px;
+    --max:       940px;
+    --font:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono:      ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1100px 500px at 85% -10%, rgba(88, 166, 255, 0.08), transparent 60%),
+      radial-gradient(900px 600px at -10% 15%, rgba(210, 153, 34, 0.05), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding: 48px 20px 80px;
+  }
+
+  .wrap { max-width: var(--max); margin: 0 auto; }
+
+  /* ---------- header ---------- */
+
+  header { margin-bottom: 42px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0 0 14px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 26px; height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  h1 {
+    font-size: clamp(34px, 5.5vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+    margin: 0 0 14px;
+    font-weight: 800;
+  }
+  h1 .soft { color: var(--text-dim); font-weight: 500; }
+
+  .sub {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 62ch;
+    margin: 0 0 22px;
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .chip {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+  .chip b { color: var(--accent); font-weight: 600; }
+
+  /* ---------- traffic-light strip ---------- */
+
+  .progress {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 0 0 34px;
+  }
+  .zone {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .zone .dot {
+    flex: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04);
+  }
+  .zone.safe  .dot { background: var(--green); box-shadow: 0 0 0 4px rgba(63, 185, 80, 0.14); }
+  .zone.care  .dot { background: var(--amber); box-shadow: 0 0 0 4px rgba(210, 153, 34, 0.14); }
+  .zone.final .dot { background: var(--red);   box-shadow: 0 0 0 4px rgba(248, 81, 73, 0.14); }
+
+  .zone .label { font-size: 13.5px; font-weight: 700; color: var(--heading); line-height: 1.25; }
+  .zone .range { font-size: 12px; color: var(--text-dim); }
+  .zone .range b { color: var(--text); font-weight: 600; }
+
+  /* ---------- section headings ---------- */
+
+  h2 {
+    font-size: 22px;
+    color: var(--heading);
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    font-weight: 700;
+  }
+  .section-note { color: var(--text-dim); font-size: 14.5px; margin: 0 0 18px; }
+  .section { margin-bottom: 40px; }
+
+  /* ---------- checklist ---------- */
+
+  .checklist {
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .checklist h2 { margin-bottom: 14px; }
+  .checklist ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .check {
+    flex: none;
+    width: 20px; height: 20px;
+    margin-top: 2px;
+    border: 1.5px solid var(--border-hi);
+    border-radius: 6px;
+    background: var(--code-bg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--green);
+  }
+  .checklist li b { color: var(--heading); font-weight: 600; }
+
+  /* ---------- step cards ---------- */
+
+  .step {
+    position: relative;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 26px 24px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .step:hover { border-color: var(--border-hi); transform: translateY(-2px); }
+  .step.step-final { border-color: rgba(210, 153, 34, 0.45); }
+
+  .step-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .step-title { display: flex; align-items: center; gap: 14px; }
+  .num {
+    flex: none;
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    font-family: var(--mono);
+    background: rgba(88, 166, 255, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(88, 166, 255, 0.28);
+  }
+  .step-final .num {
+    background: rgba(210, 153, 34, 0.14);
+    color: var(--amber);
+    border-color: rgba(210, 153, 34, 0.4);
+  }
+  .step h3 { margin: 0; font-size: 19px; color: var(--heading); font-weight: 700; letter-spacing: -0.01em; }
+
+  .pill {
+    flex: none;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 5px 12px;
+    border: 1px solid transparent;
+  }
+  .pill.safe  { color: var(--green); background: rgba(63, 185, 80, 0.1);  border-color: rgba(63, 185, 80, 0.3); }
+  .pill.care  { color: var(--amber); background: rgba(210, 153, 34, 0.1); border-color: rgba(210, 153, 34, 0.3); }
+  .pill.final { color: #ffb3ae;      background: rgba(248, 81, 73, 0.12); border-color: rgba(248, 81, 73, 0.35); }
+
+  .step p { margin: 0 0 14px; font-size: 15px; max-width: 70ch; }
+  .step p:last-child { margin-bottom: 0; }
+  .step b, .step strong { color: var(--heading); font-weight: 600; }
+
+  code.inline {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 7px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .cmd {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 0 0 14px;
+    overflow-x: auto;
+  }
+  .cmd code {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    color: var(--heading);
+    white-space: pre;
+    line-height: 1.55;
+  }
+  .cmd .prompt { color: var(--green); user-select: none; }
+  .cmd .flag { color: var(--accent); }
+  .cmd .env { color: var(--amber); }
+
+  .why {
+    display: flex;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    background: rgba(88, 166, 255, 0.05);
+    border: 1px dashed rgba(88, 166, 255, 0.22);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .why b { color: var(--accent); font-weight: 600; }
+  .why .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 7px; }
+
+  /* step 6 warning banner */
+
+  .warn-banner {
+    background: linear-gradient(180deg, rgba(210, 153, 34, 0.09), rgba(248, 81, 73, 0.05));
+    border: 1px solid rgba(210, 153, 34, 0.5);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 0 0 14px;
+  }
+  .warn-banner .warn-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .warn-banner .tri {
+    flex: none;
+    width: 0; height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 12px solid var(--amber);
+    animation: pulse-warn 2.4s ease-in-out infinite;
+  }
+  .warn-banner p { margin: 0; font-size: 14.5px; }
+
+  @keyframes pulse-warn {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.45; transform: scale(0.88); }
+  }
+
+  /* ---------- gotchas ---------- */
+
+  .gotchas {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .gotchas h2 { margin-bottom: 14px; }
+  .gotchas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .gotcha {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .gotcha .g-title { font-weight: 700; font-size: 14px; color: var(--red); margin-bottom: 4px; }
+  .gotcha p { margin: 0; font-size: 13.5px; color: var(--text-dim); }
+  .gotcha p b { color: var(--text); font-weight: 600; }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    margin-top: 48px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    align-items: center;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  footer .tag { color: var(--green); font-weight: 600; }
+
+  /* ---------- reveal animation ---------- */
+
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .reveal:nth-child(1) { animation-delay: 0.05s; }
+  .reveal:nth-child(2) { animation-delay: 0.12s; }
+  .reveal:nth-child(3) { animation-delay: 0.19s; }
+  .reveal:nth-child(4) { animation-delay: 0.26s; }
+  .reveal:nth-child(5) { animation-delay: 0.33s; }
+  .reveal:nth-child(6) { animation-delay: 0.40s; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; animation: none; }
+    .warn-banner .tri { animation: none; }
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 32px 16px 60px; }
+    .progress { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= HEADER ================= -->
+  <header class="reveal">
+    <p class="eyebrow">vaked.dev &middot; mainnet deploy</p>
+    <h1>Put the VAKED token<br><span class="soft">on Polygon — slowly and safely</span></h1>
+    <p class="sub">
+      This guide walks you through deploying VAKED to Polygon mainnet, step by step.
+      It is written for a human, not an engineer. Take your time — the only step you
+      cannot undo is the last one.
+    </p>
+    <ul class="chips">
+      <li>network&nbsp;&nbsp;<b>Polygon mainnet</b></li>
+      <li>chain id&nbsp;&nbsp;<b>137</b></li>
+      <li>token&nbsp;&nbsp;<b>VAKED</b> (mineable ERC-20)</li>
+      <li>already compiled&nbsp;&nbsp;<b>nft/VAKED.bin</b></li>
+    </ul>
+  </header>
+
+  <!-- ================= TRAFFIC LIGHT ================= -->
+  <nav class="progress reveal" aria-label="Safety overview of the steps">
+    <div class="zone safe">
+      <span class="dot"></span>
+      <div>
+        <div class="label">Safe &middot; repeatable</div>
+        <div class="range">Steps <b>1–4</b> &mdash; nothing permanent happens</div>
+      </div>
+    </div>
+    <div class="zone care">
+      <span class="dot"></span>
+      <div>
+        <div class="label">Careful</div>
+        <div class="range">Step <b>5</b> &mdash; test on the live network</div>
+      </div>
+    </div>
+    <div class="zone final">
+      <span class="dot"></span>
+      <div>
+        <div class="label">Final &middot; no undo</div>
+        <div class="range">Step <b>6</b> &mdash; you give up control</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= CHECKLIST ================= -->
+  <section class="checklist reveal section" aria-labelledby="check-heading">
+    <h2 id="check-heading">Before you start — check this box list</h2>
+    <ul>
+      <li><span class="check">&#10003;</span><span><b>A fresh wallet</b> just for deploying. Never your main or vault wallet.</span></li>
+      <li><span class="check">&#10003;</span><span><b>1–2 POL</b> on Polygon mainnet in that wallet, for gas. (Gas = the small fee the network charges for every transaction.)</span></li>
+      <li><span class="check">&#10003;</span><span><b>Node.js installed</b> on your computer (version 18 or newer).</span></li>
+      <li><span class="check">&#10003;</span><span><b>The repo cloned</b> and the compiled file <code class="inline">nft/VAKED.bin</code> present. It is already compiled — you do not compile anything.</span></li>
+      <li><span class="check">&#10003;</span><span><b>The private key</b> of your deploy wallet handy. (A private key is the secret password for a wallet. Anyone who sees it can spend everything in it — keep it safe.)</span></li>
+    </ul>
+  </section>
+
+  <!-- ================= STEPS ================= -->
+  <section aria-label="The six steps">
+
+    <!-- STEP 1 -->
+    <article class="step reveal" id="step-1">
+      <div class="step-top">
+        <div class="step-title">
+          <span class="num">1</span>
+          <h3>Get a wallet and put gas money in it</h3>
+        </div>
+        <span class="pill safe">safe to redo</span>
+      </div>
+      <p>
+        Make a <b>fresh wallet</b> that is only used for this deployment — a "deployer" wallet.
+        Then send it <b>1–2 POL</b>, Polygon's coin, on Polygon mainnet.
+        The network charges a small fee called <b>gas</b> for every transaction, and that fee is paid in POL.
+        A deploy costs a fraction of a POL, so 1–2 POL is plenty of room.
+      </p>
+      <p class="why"><span class="dot"></span><span><b>Why a fresh wallet?</b> If anything goes wrong, the damage is limited to a small amount of test money. Your real funds stay untouched.</span></p>
+    </article>
+
+    <!-- STEP 2 -->
+    <article class="step reveal" id="step-2">
+      <div class="step-top">
+        <div class="step-title">
+          <span class="num">2</span>
+          <h3>Dry run first — spend nothing</h3>
+        </div>
+        <span class="pill safe">safe to redo</span>
+      </div>
+      <p>
+        Run the deploy script in <b>dry-run mode</b>. It signs the transaction and prints exactly
+        what it <i>would</i> do, but it <b>sends nothing</b> and costs nothing.
+        You will see your wallet address, the <b>predicted contract address</b>
+        (the address the token will live at once it exists — it is calculated from your wallet and your transaction count, so it is known before the deploy), and the gas estimate.
+      </p>
+      <div class="cmd"><code><span class="prompt">$ </span><span class="env">PRIVATE_KEY=</span>0x... <span class="env">node</span> nft/deploy.js <span class="flag">--vaked</span></code></div>
+      <p>Read the output. The predicted address should look like a normal address (<code class="inline">0x...</code>) and should match what you expect.</p>
+      <p class="why"><span class="dot"></span><span><b>Why bother?</b> This is the free rehearsal. If something is wrong, you find out now, not after real money moves.</span></p>
+    </article>
+
+    <!-- STEP 3 -->
+    <article class="step reveal" id="step-3">
+      <div class="step-top">
+        <div class="step-title">
+          <span class="num">3</span>
+          <h3>Broadcast for real</h3>
+        </div>
+        <span class="pill safe">safe to redo</span>
+      </div>
+      <p>
+        Same command, one extra flag: <code class="inline">--broadcast</code>. Now the script
+        <b>actually sends the transaction</b> to the network and pays gas with your POL.
+        It prints a <b>transaction hash</b> — a long string that is the receipt for your transaction,
+        like a tracking number. Anyone can look it up on <b>polygonscan.com</b>.
+      </p>
+      <div class="cmd"><code><span class="prompt">$ </span><span class="env">PRIVATE_KEY=</span>0x... <span class="env">node</span> nft/deploy.js <span class="flag">--vaked --broadcast</span></code></div>
+      <p>Wait for the transaction to be confirmed, then check polygonscan: your contract should exist at the predicted address.</p>
+      <p class="why"><span class="dot"></span><span><b>Why bother?</b> If the deploy fails (for example, you forgot gas), nothing is lost — your wallet keeps its remaining POL and you can simply try again.</span></p>
+    </article>
+
+    <!-- STEP 4 -->
+    <article class="step reveal" id="step-4">
+      <div class="step-top">
+        <div class="step-title">
+          <span class="num">4</span>
+          <h3>Verify the source code</h3>
+        </div>
+        <span class="pill safe">safe to redo</span>
+      </div>
+      <p>
+        Right now, the network only knows the compiled machine code of your contract.
+        <b>Verification</b> publishes the human-readable source code next to it on
+        <b>Sourcify</b> or <b>Polygonscan</b>. Then anyone can compare the source to the
+        real bytecode and check the fair-launch promises for themselves:
+      </p>
+      <p>
+        a <b>21,000,000 token cap</b>, <b>no premine</b> (nobody — including the deployer —
+        holds tokens before the public starts mining), and a <b>proof-of-work mint</b>
+        (tokens are only created by solving a puzzle, the same pattern as early Bitcoin).
+      </p>
+      <p class="why"><span class="dot"></span><span><b>Why bother?</b> This is what makes VAKED "verifiable, not promised". An unverified contract asks you to trust; a verified one lets you check.</span></p>
+    </article>
+
+    <!-- STEP 5 -->
+    <article class="step reveal" id="step-5">
+      <div class="step-top">
+        <div class="step-title">
+          <span class="num">5</span>
+          <h3>Test a few mints</h3>
+        </div>
+        <span class="pill care">live network — be careful</span>
+      </div>
+      <p>
+        Before you hand over control, mine a few tokens on the live network to confirm
+        mining works. The repo has a miner: <code class="inline">miner/mine.js</code>.
+        Point it at your deployed contract and let it solve one or two proof-of-work puzzles.
+        Each mint costs only gas — no fee, no tax.
+      </p>
+      <div class="cmd"><code><span class="prompt">$ </span><span class="env">node</span> miner/mine.js <span class="flag">--rpc</span> &lt;rpc-url&gt; <span class="flag">--contract</span> &lt;deployed-address&gt; <span class="flag">--key</span> &lt;privkey&gt;</code></div>
+      <p>
+        Check that mints confirm and that the <b>difficulty adjustment</b> behaves —
+        after a while, the puzzle difficulty should move toward the target of roughly
+        one mint per 60 blocks. This is the moment to notice any surprises, while you
+        still own the contract and could react.
+      </p>
+      <p class="why"><span class="dot"></span><span><b>Why bother?</b> Once ownership is gone, you cannot fix anything. This is your last chance to see the machine run.</span></p>
+    </article>
+
+    <!-- STEP 6 -->
+    <article class="step step-final reveal" id="step-6">
+      <div class="step-top">
+        <div class="step-title">
+          <span class="num">6</span>
+          <h3>Renounce ownership — last, and forever</h3>
+        </div>
+        <span class="pill final">final — cannot be undone</span>
+      </div>
+      <div class="warn-banner">
+        <div class="warn-title"><span class="tri"></span>You cannot undo this</div>
+        <p>
+          Calling <code class="inline">renounceOwnership()</code> sets the owner to
+          <code class="inline">address(0)</code> — a black hole address nobody controls.
+          After this, <b>nobody, not even you</b>, can change the contract, its settings,
+          or its ownership. There is no "oops" button.
+        </p>
+      </div>
+      <p>
+        Do this <b>only after steps 1–5 are fully confirmed</b>:
+        deployed, verified, and tested. And do <b>not</b> bundle it into the deploy
+        transaction — renounce as a separate, deliberate step, days after you are calm
+        about everything else.
+      </p>
+      <p class="why"><span class="dot"></span><span><b>Why bother?</b> Renouncing is what makes the fair launch real: after this, the token is not "we promise it's fair" — it is permanently, mechanically fair. This step converts trust into math.</span></p>
+    </article>
+
+  </section>
+
+  <!-- ================= GOTCHAS ================= -->
+  <section class="gotchas reveal" aria-labelledby="gotcha-heading">
+    <h2 id="gotcha-heading">Things that can go wrong</h2>
+    <div class="gotchas-grid">
+      <div class="gotcha">
+        <div class="g-title">No gas in the wallet</div>
+        <p>If the wallet runs out of POL, the transaction fails and nothing is deployed. <b>Fix:</b> top up with POL and try again. No harm done.</p>
+      </div>
+      <div class="gotcha">
+        <div class="g-title">Wrong or lost private key</div>
+        <p>If the key is wrong, the transaction is invalid. If the key is lost or leaked, the wallet (and anything in it) is gone or stolen. <b>Fix:</b> keep the key offline and never paste it anywhere public.</p>
+      </div>
+      <div class="gotcha">
+        <div class="g-title">Renouncing too early</div>
+        <p>If you renounce before testing, a bug in the minting or difficulty logic becomes permanent. <b>Fix:</b> there is no fix. That is why step 6 comes last and alone.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="tag">verifiable, not promised</span>
+    <span>This is a documentation page only — it changes no contract behavior.</span>
+    <span>Polygon mainnet &middot; chain id 137</span>
+  </footer>
+
+</div>
+</body>
+</html>
