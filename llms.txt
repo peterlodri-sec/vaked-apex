@@ -41,6 +41,8 @@ vaked.dev is the sovereign computing ecosystem, low-bit neural network architect
 - Skills Registry: `https://vaked.dev/.well-known/skills/index.json`
 - MagiSCanner Skill: `https://vaked.dev/.well-known/skills/magiscanner.json`
 - Smart Tree Skill: `https://vaked.dev/.well-known/skills/smart-tree.json`
+- 8b.is Documentation Hub: `https://www.8b.is/documentation`
+- 8b.is Public Documents: `https://github.com/8b-is/8b-public-documents`
 - Agent Descriptor: `https://vaked.dev/.well-known/agent.json`
 - Security Policy: `https://vaked.dev/.well-known/security.txt`
 - Full LLM Treatise: `https://vaked.dev/llms-full.txt`

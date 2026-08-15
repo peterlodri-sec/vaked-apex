@@ -58,6 +58,8 @@ The vaked.dev ecosystem is an autonomous, decentralized computing fabric spannin
 
 - **MagiSCanner MCP**: `magiscanner --mcp` (Security Sentinel JSON-RPC protocol)
 - **Smart-Tree MCP**: `st --mcp` (Model Context Protocol JSON-RPC standard)
+- **8b.is Documentation Hub**: `https://www.8b.is/documentation`
+- **8b-Public-Documents**: `https://github.com/8b-is/8b-public-documents`
 - **OpenAI-Compatible Gateway**: `POST https://ocean.vaked.dev/v1/chat/completions`
 - **MEM8 Memory Recall**: `POST https://ocean.vaked.dev/api/v1/memory/recall`
 - **Agent Factory Scheduler**: `POST https://ocean.vaked.dev/api/v1/agents/spawn`
