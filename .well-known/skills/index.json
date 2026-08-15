@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "vaked-skills-hub",
+  "version": "1.0.0",
+  "description": "Public Machine-Callable AgentField Skills Registry for the Sovereign Constellation",
+  "updated_at": "2026-08-15T14:30:00Z",
+  "skills": [
+    {
+      "id": "sovereign-agent",
+      "name": "Sovereign Agent Orchestrator",
+      "description": "Coordinates multi-reasoner execution pipelines with deterministic state persistence and verification loops.",
+      "version": "1.0.0",
+      "uri": "https://vaked.dev/.well-known/skills/sovereign-agent.json"
+    },
+    {
+      "id": "mem8-memory",
+      "name": "MEM8 Associative Wave Memory",
+      "description": "Continuous harmonic wave memory recall across Gamma, Beta, Alpha, and Theta cognitive bands.",
+      "version": "1.0.0",
+      "uri": "https://vaked.dev/.well-known/skills/mem8-memory.json"
+    },
+    {
+      "id": "transformers-ultra",
+      "name": "Transformers Ultra Inference",
+      "description": "Zero-overhead RoPE dimension guarding and AST reflection removal across 11 model families.",
+      "version": "1.0.0",
+      "uri": "https://vaked.dev/.well-known/skills/transformers-ultra.json"
+    }
+  ]
+}

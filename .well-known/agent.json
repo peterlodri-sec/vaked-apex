@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "vaked-sovereign-agent",
+  "version": "1.0.0",
+  "description": "Sovereign multi-agent reasoning, low-bit inference, and associative wave memory fabric for the vaked.dev constellation.",
+  "author": "Peter Lodri (@0xp3t3rl)",
+  "homepage": "https://vaked.dev",
+  "documentation": "https://vaked.dev/llms-full.txt",
+  "capabilities": {
+    "inference": {
+      "endpoint": "https://ocean.vaked.dev/v1/chat/completions",
+      "models": ["bitnet-b1.58-3b", "transformers-ultra-8b", "qwave-deepseek-r1"],
+      "protocol": "openai-compatible"
+    },
+    "memory": {
+      "endpoint": "https://ocean.vaked.dev/api/v1/memory/recall",
+      "type": "MEM8-holographic-wave",
+      "bands": ["gamma", "beta", "alpha", "theta"]
+    },
+    "worklog": {
+      "feed_json": "https://worklog.vaked.dev/feed.json",
+      "feed_xml": "https://worklog.vaked.dev/feed.xml"
+    },
+    "skills": {
+      "registry": "https://vaked.dev/.well-known/skills/index.json"
+    }
+  },
+  "nodes": [
+    { "name": "Apex", "url": "https://vaked.dev" },
+    { "name": "Ocean", "url": "https://ocean.vaked.dev" },
+    { "name": "Worklog", "url": "https://worklog.vaked.dev" },
+    { "name": "Pocoo", "url": "https://pocoo.vaked.dev" },
+    { "name": "Music", "url": "https://music.vaked.dev" },
+    { "name": "Store", "url": "https://store.vaked.dev" },
+    { "name": "Art", "url": "https://art.vaked.dev" },
+    { "name": "Axiom Quant", "url": "https://axiomquant.org" },
+    { "name": "MLX Quant", "url": "https://mlxquantlovefrom.com" },
+    { "name": "Portail", "url": "https://portail.vaked.dev" },
+    { "name": "Proposal", "url": "https://proposal.vaked.dev" }
+  ]
+}

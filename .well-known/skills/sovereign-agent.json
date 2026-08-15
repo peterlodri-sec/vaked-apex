@@ -1,0 +1,18 @@
+{
+  "id": "sovereign-agent",
+  "name": "Sovereign Agent Orchestrator",
+  "version": "1.0.0",
+  "type": "agentfield-skill",
+  "interface": {
+    "entrypoint": "https://ocean.vaked.dev/api/v1/agents/spawn",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "parameters": {
+      "task": { "type": "string", "required": true, "description": "High-level goal description" },
+      "context": { "type": "object", "required": false, "description": "Persistent memory context" },
+      "max_laps": { "type": "integer", "default": 42, "description": "Maximum Backyard Ultra laps" }
+    }
+  }
+}

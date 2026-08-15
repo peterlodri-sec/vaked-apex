@@ -1,0 +1,18 @@
+{
+  "id": "mem8-memory",
+  "name": "MEM8 Associative Wave Memory",
+  "version": "1.0.0",
+  "type": "agentfield-skill",
+  "interface": {
+    "entrypoint": "https://ocean.vaked.dev/api/v1/memory/recall",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "parameters": {
+      "query": { "type": "string", "required": true, "description": "Search prompt or mental state query" },
+      "band": { "type": "string", "enum": ["gamma", "beta", "alpha", "theta"], "default": "beta" },
+      "top_k": { "type": "integer", "default": 5, "description": "Number of resonant memories to retrieve" }
+    }
+  }
+}

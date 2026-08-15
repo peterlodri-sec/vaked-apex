@@ -1,0 +1,62 @@
+# vaked.dev — Sovereign Constellation Full-Stack Architecture Monograph
+> Comprehensive Knowledge Base for Autonomous Reasoning Agents, LLMs, and Researchers
+> Author: Peter Lodri (@0xp3t3rl) · Epoch: 2026-08-15
+
+---
+
+## 1. Executive Summary & Philosophy
+"All entity have problems, but problems are seeds for enlightenment." — Peter Lodri
+"Life is God's goods and we all are its little buddhas." — Peter Lodri
+
+The vaked.dev ecosystem is an autonomous, decentralized computing fabric spanning 11 specialized nodes. Built from first principles on NixOS, Metal, WebAssembly, Swift 6, and Rust, the constellation provides complete sovereign independence across inference, memory, mathematical research, creative expression, and decentralized attestation.
+
+---
+
+## 2. Constellation Node Matrix
+
+| Node | URL | Purpose & Engine |
+| :--- | :--- | :--- |
+| **Apex** | `https://vaked.dev/` | Master constellation index, 60fps WebGL constellation canvas, 432Hz harmonic synth |
+| **Ocean** | `https://ocean.vaked.dev/` | Sovereign Compute Hub, Model Ocean (OpenAI API), MEM8 Memory Ocean, Agent Swarm Factory |
+| **Worklog** | `https://worklog.vaked.dev/` | Immutable append-only engineering board logging daily fleet milestones |
+| **Pocoo** | `https://pocoo.vaked.dev/` | Monograph fleet holding 85 volumes of deep-dive technical treatises |
+| **Music** | `https://music.vaked.dev/` | 2048-particle Fibonacci sphere visualizer, 432Hz diatonic polyphonic audio engine |
+| **Store** | `https://store.vaked.dev/` | Web3 token-gated lossless master audio stems, fine art archival prints |
+| **Art** | `https://art.vaked.dev/` | Generative visual art gallery, Paintings For Secrets ERC-721 smart contracts |
+| **Axiom Quant** | `https://axiomquant.org/` | Stochastic calculus lab: SLE_κ Schramm-Loewner Evolution, Dyadic Wavelets, Markowitz QP |
+| **MLX Quant** | `https://mlxquantlovefrom.com/` | Apple Silicon Metal BitNet b1.58 2-bit packing inference engine @ 40.8 GB/s |
+| **Portail** | `https://portail.vaked.dev/` | Sovereign Ed25519 gateway and decentralized cryptographic identity layer |
+| **Proposal** | `https://proposal.vaked.dev/` | Open public RFCs, mathematical theses, and architecture blueprints |
+
+---
+
+## 3. Deep Technical Architecture
+
+### 3.1 Transformers-Ultra (`8b-is/transformers`)
+- **RoPE Guarding**: Mathematical block-diagonal rotation operator R_Θ,m applied strictly to the head dimension slice d_k = d_head without reshaping or allocations.
+- **AST Optimization**: Eliminated runtime python dynamic signature reflection, yielding >2.2x speedup on token generation loops.
+- **Cross-Architecture Support**: Native support for Llama 3, Mistral, Gemma 2, Qwen 2.5, Cohere Command-R, Phi-3.5, Starcoder 2, Falcon, Nemotron, Dbrx, and DeepSeek.
+
+### 3.2 MEM8 Wave Memory Core
+- **Cognitive Bands**:
+  - Gamma (8Hz): High-frequency tactical execution memory.
+  - Beta (4Hz): Working conversational memory.
+  - Alpha (2Hz): Conceptual relational graphs.
+  - Theta (1Hz): Deep philosophical and invariant anchors.
+- **Recall Algorithm**: Continuous cosine spectral resonance similarity S(u, v) = (u · v) / (||u|| ||v||) over harmonic carrier waves.
+
+### 3.3 Proof of Work & Presence Token (VAKED)
+- **Standard**: EIP-918 Mineable ERC-20 / ERC-721 token.
+- **Contract**: Solidity 0.8.20 with OpenZeppelin v5.
+- **Mining Loop**: Multi-threaded browser Web Workers utilizing SIMD128 Keccak-256 binary search against cryptographic target difficulty.
+
+---
+
+## 4. Machine APIs & Interfaces
+
+- **OpenAI-Compatible Gateway**: `POST https://ocean.vaked.dev/v1/chat/completions`
+- **MEM8 Memory Recall**: `POST https://ocean.vaked.dev/api/v1/memory/recall`
+- **Agent Factory Scheduler**: `POST https://ocean.vaked.dev/api/v1/agents/spawn`
+- **Fleet Feed (JSON)**: `GET https://worklog.vaked.dev/feed.json`
+- **Fleet Feed (RSS)**: `GET https://worklog.vaked.dev/feed.xml`
+- **Skills Registry**: `GET https://vaked.dev/.well-known/skills/index.json`

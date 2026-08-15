@@ -1,0 +1,18 @@
+{
+  "id": "transformers-ultra",
+  "name": "Transformers Ultra Inference",
+  "version": "1.0.0",
+  "type": "agentfield-skill",
+  "interface": {
+    "entrypoint": "https://ocean.vaked.dev/v1/chat/completions",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "parameters": {
+      "model": { "type": "string", "default": "transformers-ultra-8b" },
+      "messages": { "type": "array", "required": true, "description": "Chat messages list" },
+      "temperature": { "type": "number", "default": 0.7 }
+    }
+  }
+}

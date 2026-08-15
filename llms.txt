@@ -1,0 +1,43 @@
+# vaked.dev — The Sovereign Constellation Ecosystem
+> Machine-Readable LLM Architecture Manifesto & Constellation Directory
+> Author: Peter Lodri (@0xp3t3rl) · License: AGPL-3.0 / MIT
+
+## Overview
+vaked.dev is the sovereign computing ecosystem, low-bit neural network architecture (BitNet b1.58), distributed associative wave memory (MEM8), and mathematical monograph constellation developed by Peter Lodri.
+
+## Sovereign Node Directory
+
+- [Constellation Apex](https://vaked.dev/): Master node index, 60fps WebGL constellation canvas, and 432Hz harmonic audio engine.
+- [Ocean Compute Hub](https://ocean.vaked.dev/): High-compute 1-bit inference gateway, distributed associative wave memory, autonomous agent swarm factory, and mining coordinator.
+- [Fleet Worklog](https://worklog.vaked.dev/): Immutable append-only engineering board logging daily fleet milestones with JSON and RSS feeds.
+- [Pocoo Monograph Fleet](https://pocoo.vaked.dev/): 85 long-form sovereign treatises, including "The Mechanics of Sovereignty: Three Days on the Metal, the Wave, and the Loop".
+- [Music Constellation](https://music.vaked.dev/): 2048-particle Fibonacci sphere visualizer and 432Hz diatonic polyphonic synth.
+- [Sovereign Store](https://store.vaked.dev/): Web3 token-gated lossless master stems, physical vinyl, and archival fine art prints.
+- [Vision Gallery & Art](https://art.vaked.dev/): Generative visual art gallery and Paintings For Secrets ERC-721 on-chain smart contracts.
+- [Axiom Quant Lab](https://axiomquant.org/): Interactive stochastic calculus suite featuring Schramm-Loewner Evolution (SLE_κ), Dyadic Wavelets, and Markowitz QP.
+- [MLX Quant Love From](https://mlxquantlovefrom.com/): Apple Silicon Metal BitNet b1.58 2-bit packing inference engine achieving 40.8 GB/s memory bandwidth.
+- [Portail Gateway](https://portail.vaked.dev/): Cryptographic Ed25519 identity and reverse-proxy access plane.
+- [Public Proposals](https://proposal.vaked.dev/): Open-source mathematical RFCs, architecture blueprints, and grant proposals.
+
+## Core Architectural Primitives
+
+1. **Transformers-Ultra (`8b-is/transformers`)**:
+   - Zero-overhead RoPE dimension guarding across 11 model architectures (Llama, Mistral, Gemma, Qwen2, Cohere, Phi3, Starcoder2, Falcon, Nemotron, Dbrx, Deepseek).
+   - AST reflection removal achieving >2.2x inference speedup on cold CPU/Metal loops.
+2. **MEM8 Associative Wave Memory**:
+   - Continuous holographic vector resonance mapping Gamma (8Hz), Beta (4Hz), Alpha (2Hz), and Theta (1Hz) cognitive bands.
+   - Swift 6 vDSP sub-microsecond vector similarity (<420ns latency).
+3. **BitNet b1.58 Ternary Packing**:
+   - 2-bit MSL quantization packing 4 ternary weights per byte with zero runtime float unpacking penalty.
+4. **AgentField Composite Intelligence**:
+   - Autonomous multi-reasoner execution graph with deterministic verification and state persistence.
+
+## Machine Endpoints
+
+- Skills Registry: `https://vaked.dev/.well-known/skills/index.json`
+- Agent Descriptor: `https://vaked.dev/.well-known/agent.json`
+- Security Policy: `https://vaked.dev/.well-known/security.txt`
+- Full LLM Treatise: `https://vaked.dev/llms-full.txt`
+- XML Sitemap: `https://vaked.dev/sitemap.xml`
+- Worklog JSON Feed: `https://worklog.vaked.dev/feed.json`
+- Worklog RSS Feed: `https://worklog.vaked.dev/feed.xml`
