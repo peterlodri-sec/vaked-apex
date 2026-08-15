@@ -1,0 +1,27 @@
+{
+  "id": "magiscanner",
+  "name": "MagiSCanner Security & Supply Chain Sentinel",
+  "version": "1.0.0",
+  "type": "agentfield-skill",
+  "repository": "https://github.com/8bit-wraith/magiscanner",
+  "interface": {
+    "cli": {
+      "command": "magiscanner",
+      "args": ["scan", "."]
+    },
+    "mcp_server": {
+      "command": "magiscanner",
+      "args": ["--mcp"],
+      "tools": [
+        {
+          "name": "magiscanner_audit_workspace",
+          "description": "Performs deep file hash memory verification, certificate trust neutralization, and supply chain attack detection across codebases."
+        },
+        {
+          "name": "magiscanner_quarantine_check",
+          "description": "Checks and isolates suspicious or poisoned dependencies in autonomous agentic loops."
+        }
+      ]
+    }
+  }
+}

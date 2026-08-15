@@ -1,10 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "vaked-skills-hub",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Public Machine-Callable AgentField Skills Registry for the Sovereign Constellation",
-  "updated_at": "2026-08-15T14:37:00Z",
+  "updated_at": "2026-08-15T15:01:00Z",
   "skills": [
+    {
+      "id": "magiscanner",
+      "name": "MagiSCanner Security & Supply Chain Sentinel",
+      "description": "Deep file security scanner, hash memory, certificate trust neutralization, and supply chain attack detection.",
+      "version": "1.0.0",
+      "uri": "https://vaked.dev/.well-known/skills/magiscanner.json",
+      "repository": "https://github.com/8bit-wraith/magiscanner"
+    },
     {
       "id": "smart-tree",
       "name": "Smart Tree AST & Quantum Context Compression",

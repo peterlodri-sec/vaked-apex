@@ -81,11 +81,12 @@ market price.</p>
   <li><strong>Minting</strong>: proof-of-work, EIP-918-style — miners find a
     <code>nonce</code> such that
     <code>keccak256(challengeNumber ‖ msg.sender ‖ nonce) &lt; miningTarget</code>.
-    Solutions are bound to the miner's address and to a rotating challenge
-    derived from a recent block, so work cannot be pre-mined or replayed.</li>
+    Solutions are bound to the miner's address and to a rotating round challenge
+    that persists across blocks, so work cannot be replayed or relayed between
+    miners.</li>
   <li><strong>Difficulty</strong>: auto-adjusts every <strong>1,024 mints</strong>
     toward a target average <strong>60-block</strong> mint interval. Initial
-    target <code>1&lt;&lt;224</code>, clamped rails <code>[1&lt;&lt;200, 1&lt;&lt;232]</code>,
+    target <code>1&lt;&lt;232</code>, clamped rails <code>[1&lt;&lt;200, 1&lt;&lt;232]</code>,
     midpoint smoothing (±4× per epoch, never all-or-nothing).</li>
   <li><strong>Rewards</strong>: start <strong>50 VAKED/mint</strong>, halved every
     <strong>210,000 mints</strong>. The geometric series converges on the
@@ -149,7 +150,7 @@ Do not acquire VAKED with the expectation of profit; acquire it only to
 participate in the vaked.dev constellation.</p>
 
 <footer>
-  <p><a href="/">← vaked.dev</a> · VAKED whitepaper · v1.0 · 2026-08-15</p>
+  <p><a href="/">← vaked.dev</a> · VAKED whitepaper · v1.1 · 2026-08-15</p>
 </footer>
 </body>
 </html>
