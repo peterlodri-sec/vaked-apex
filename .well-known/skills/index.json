@@ -1,10 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "vaked-skills-hub",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Public Machine-Callable AgentField Skills Registry for the Sovereign Constellation",
-  "updated_at": "2026-08-15T14:30:00Z",
+  "updated_at": "2026-08-15T14:37:00Z",
   "skills": [
+    {
+      "id": "smart-tree",
+      "name": "Smart Tree AST & Quantum Context Compression",
+      "description": "Lightning-fast directory AST visualization, quantum context token compression, and MCP server.",
+      "version": "5.2.0",
+      "uri": "https://vaked.dev/.well-known/skills/smart-tree.json",
+      "repository": "https://github.com/8b-is/smart-tree"
+    },
     {
       "id": "sovereign-agent",
       "name": "Sovereign Agent Orchestrator",

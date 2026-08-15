@@ -1,0 +1,23 @@
+{
+  "id": "smart-tree",
+  "name": "Smart Tree AST & Quantum Context Compression",
+  "version": "5.2.0",
+  "type": "agentfield-skill",
+  "repository": "https://github.com/8b-is/smart-tree",
+  "interface": {
+    "mcp_server": {
+      "command": "st",
+      "args": ["--mcp"],
+      "tools": [
+        {
+          "name": "smart_tree_scan",
+          "description": "Scans directory tree with intelligent AST symbol extraction and quantum token compression."
+        },
+        {
+          "name": "smart_tree_mem8_search",
+          "description": "Performs git consciousness archaeology and associative commit recall across history."
+        }
+      ]
+    }
+  }
+}

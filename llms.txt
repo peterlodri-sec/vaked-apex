@@ -3,14 +3,15 @@
 > Author: Peter Lodri (@0xp3t3rl) · License: AGPL-3.0 / MIT
 
 ## Overview
-vaked.dev is the sovereign computing ecosystem, low-bit neural network architecture (BitNet b1.58), distributed associative wave memory (MEM8), and mathematical monograph constellation developed by Peter Lodri.
+vaked.dev is the sovereign computing ecosystem, low-bit neural network architecture (BitNet b1.58), AST-aware quantum context tree synthesis (smart-tree), distributed associative wave memory (MEM8), and mathematical monograph constellation developed by Peter Lodri.
 
-## Sovereign Node Directory
+## Sovereign Node & Tool Directory
 
 - [Constellation Apex](https://vaked.dev/): Master node index, 60fps WebGL constellation canvas, and 432Hz harmonic audio engine.
 - [Ocean Compute Hub](https://ocean.vaked.dev/): High-compute 1-bit inference gateway, distributed associative wave memory, autonomous agent swarm factory, and mining coordinator.
 - [Fleet Worklog](https://worklog.vaked.dev/): Immutable append-only engineering board logging daily fleet milestones with JSON and RSS feeds.
 - [Pocoo Monograph Fleet](https://pocoo.vaked.dev/): 85 long-form sovereign treatises, including "The Mechanics of Sovereignty: Three Days on the Metal, the Wave, and the Loop".
+- [Smart Tree AST Context Engine](https://github.com/8b-is/smart-tree): Lightning-fast directory AST visualizer, quantum token compression, MEM8 commit archaeology, and MCP server.
 - [Music Constellation](https://music.vaked.dev/): 2048-particle Fibonacci sphere visualizer and 432Hz diatonic polyphonic synth.
 - [Sovereign Store](https://store.vaked.dev/): Web3 token-gated lossless master stems, physical vinyl, and archival fine art prints.
 - [Vision Gallery & Art](https://art.vaked.dev/): Generative visual art gallery and Paintings For Secrets ERC-721 on-chain smart contracts.
@@ -21,20 +22,21 @@ vaked.dev is the sovereign computing ecosystem, low-bit neural network architect
 
 ## Core Architectural Primitives
 
-1. **Transformers-Ultra (`8b-is/transformers`)**:
-   - Zero-overhead RoPE dimension guarding across 11 model architectures (Llama, Mistral, Gemma, Qwen2, Cohere, Phi3, Starcoder2, Falcon, Nemotron, Dbrx, Deepseek).
-   - AST reflection removal achieving >2.2x inference speedup on cold CPU/Metal loops.
-2. **MEM8 Associative Wave Memory**:
-   - Continuous holographic vector resonance mapping Gamma (8Hz), Beta (4Hz), Alpha (2Hz), and Theta (1Hz) cognitive bands.
-   - Swift 6 vDSP sub-microsecond vector similarity (<420ns latency).
-3. **BitNet b1.58 Ternary Packing**:
+1. **Smart-Tree (`8b-is/smart-tree`)**:
+   - High-throughput Rust directory AST symbol extraction, git consciousness archaeology, and quantum context compression (`st --mode quantum`, `st --mcp`).
+2. **Transformers-Ultra (`8b-is/transformers`)**:
+   - Zero-overhead RoPE dimension guarding across 11 model architectures and AST reflection removal achieving >2.2x speedup on token generation loops.
+3. **MEM8 Associative Wave Memory**:
+   - Continuous holographic vector resonance mapping Gamma (8Hz), Beta (4Hz), Alpha (2Hz), and Theta (1Hz) cognitive bands with Swift 6 vDSP (<420ns latency).
+4. **BitNet b1.58 Ternary Packing**:
    - 2-bit MSL quantization packing 4 ternary weights per byte with zero runtime float unpacking penalty.
-4. **AgentField Composite Intelligence**:
+5. **AgentField Composite Intelligence**:
    - Autonomous multi-reasoner execution graph with deterministic verification and state persistence.
 
 ## Machine Endpoints
 
 - Skills Registry: `https://vaked.dev/.well-known/skills/index.json`
+- Smart Tree Skill: `https://vaked.dev/.well-known/skills/smart-tree.json`
 - Agent Descriptor: `https://vaked.dev/.well-known/agent.json`
 - Security Policy: `https://vaked.dev/.well-known/security.txt`
 - Full LLM Treatise: `https://vaked.dev/llms-full.txt`

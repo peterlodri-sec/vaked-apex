@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "vaked-sovereign-agent",
-  "version": "1.0.0",
-  "description": "Sovereign multi-agent reasoning, low-bit inference, and associative wave memory fabric for the vaked.dev constellation.",
+  "version": "1.1.0",
+  "description": "Sovereign multi-agent reasoning, low-bit inference, AST context compression, and associative wave memory fabric for the vaked.dev constellation.",
   "author": "Peter Lodri (@0xp3t3rl)",
   "homepage": "https://vaked.dev",
   "documentation": "https://vaked.dev/llms-full.txt",
@@ -11,6 +11,11 @@
       "endpoint": "https://ocean.vaked.dev/v1/chat/completions",
       "models": ["bitnet-b1.58-3b", "transformers-ultra-8b", "qwave-deepseek-r1"],
       "protocol": "openai-compatible"
+    },
+    "ast_compression": {
+      "repository": "https://github.com/8b-is/smart-tree",
+      "binary": "st",
+      "protocol": "mcp-jsonrpc"
     },
     "memory": {
       "endpoint": "https://ocean.vaked.dev/api/v1/memory/recall",
@@ -36,6 +41,7 @@
     { "name": "Axiom Quant", "url": "https://axiomquant.org" },
     { "name": "MLX Quant", "url": "https://mlxquantlovefrom.com" },
     { "name": "Portail", "url": "https://portail.vaked.dev" },
+    { "name": "Smart-Tree", "url": "https://github.com/8b-is/smart-tree" },
     { "name": "Proposal", "url": "https://proposal.vaked.dev" }
   ]
 }

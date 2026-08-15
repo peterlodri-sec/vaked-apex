@@ -8,15 +8,16 @@
 "All entity have problems, but problems are seeds for enlightenment." — Peter Lodri
 "Life is God's goods and we all are its little buddhas." — Peter Lodri
 
-The vaked.dev ecosystem is an autonomous, decentralized computing fabric spanning 11 specialized nodes. Built from first principles on NixOS, Metal, WebAssembly, Swift 6, and Rust, the constellation provides complete sovereign independence across inference, memory, mathematical research, creative expression, and decentralized attestation.
+The vaked.dev ecosystem is an autonomous, decentralized computing fabric spanning 11 specialized nodes and sovereign toolchains. Built from first principles on NixOS, Metal, WebAssembly, Swift 6, and Rust, the constellation provides complete sovereign independence across inference, memory, mathematical research, creative expression, and decentralized attestation.
 
 ---
 
-## 2. Constellation Node Matrix
+## 2. Constellation Node & Tool Matrix
 
-| Node | URL | Purpose & Engine |
+| Node / Tool | URL | Purpose & Engine |
 | :--- | :--- | :--- |
 | **Apex** | `https://vaked.dev/` | Master constellation index, 60fps WebGL constellation canvas, 432Hz harmonic synth |
+| **Smart-Tree** | `https://github.com/8b-is/smart-tree` | AST-aware quantum context tree generator, MEM8 git consciousness archaeology, MCP server (`brew install 8b-is/vaked/smart-tree`) |
 | **Ocean** | `https://ocean.vaked.dev/` | Sovereign Compute Hub, Model Ocean (OpenAI API), MEM8 Memory Ocean, Agent Swarm Factory |
 | **Worklog** | `https://worklog.vaked.dev/` | Immutable append-only engineering board logging daily fleet milestones |
 | **Pocoo** | `https://pocoo.vaked.dev/` | Monograph fleet holding 85 volumes of deep-dive technical treatises |
@@ -32,12 +33,17 @@ The vaked.dev ecosystem is an autonomous, decentralized computing fabric spannin
 
 ## 3. Deep Technical Architecture
 
-### 3.1 Transformers-Ultra (`8b-is/transformers`)
+### 3.1 Smart-Tree (`8b-is/smart-tree`)
+- **AST Parsing**: Parallel syn/tree-sitter AST extraction mapping function signatures, structs, and dependency call paths without token waste.
+- **Quantum Compression**: Recursive context compaction (`st --mode quantum`) packing directory trees into token-efficient LLM prompts.
+- **MEM8 Archaeology**: Git commit hash state persistence with semantic wave recall.
+
+### 3.2 Transformers-Ultra (`8b-is/transformers`)
 - **RoPE Guarding**: Mathematical block-diagonal rotation operator R_Θ,m applied strictly to the head dimension slice d_k = d_head without reshaping or allocations.
 - **AST Optimization**: Eliminated runtime python dynamic signature reflection, yielding >2.2x speedup on token generation loops.
 - **Cross-Architecture Support**: Native support for Llama 3, Mistral, Gemma 2, Qwen 2.5, Cohere Command-R, Phi-3.5, Starcoder 2, Falcon, Nemotron, Dbrx, and DeepSeek.
 
-### 3.2 MEM8 Wave Memory Core
+### 3.3 MEM8 Wave Memory Core
 - **Cognitive Bands**:
   - Gamma (8Hz): High-frequency tactical execution memory.
   - Beta (4Hz): Working conversational memory.
@@ -45,15 +51,11 @@ The vaked.dev ecosystem is an autonomous, decentralized computing fabric spannin
   - Theta (1Hz): Deep philosophical and invariant anchors.
 - **Recall Algorithm**: Continuous cosine spectral resonance similarity S(u, v) = (u · v) / (||u|| ||v||) over harmonic carrier waves.
 
-### 3.3 Proof of Work & Presence Token (VAKED)
-- **Standard**: EIP-918 Mineable ERC-20 / ERC-721 token.
-- **Contract**: Solidity 0.8.20 with OpenZeppelin v5.
-- **Mining Loop**: Multi-threaded browser Web Workers utilizing SIMD128 Keccak-256 binary search against cryptographic target difficulty.
-
 ---
 
 ## 4. Machine APIs & Interfaces
 
+- **Smart-Tree MCP**: `st --mcp` (Model Context Protocol JSON-RPC standard)
 - **OpenAI-Compatible Gateway**: `POST https://ocean.vaked.dev/v1/chat/completions`
 - **MEM8 Memory Recall**: `POST https://ocean.vaked.dev/api/v1/memory/recall`
 - **Agent Factory Scheduler**: `POST https://ocean.vaked.dev/api/v1/agents/spawn`
