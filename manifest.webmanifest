@@ -1,0 +1,22 @@
+{
+  "name": "vaked.dev — The Constellation",
+  "short_name": "vaked.dev",
+  "description": "The constellation apex. A sovereign mesh of art, music, books, math, and intelligent agents.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04060a",
+  "theme_color": "#04060a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/og-vaked.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg"
+    }
+  ]
+}

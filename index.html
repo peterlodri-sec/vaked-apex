@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vaked.dev — the constellation</title>
+<meta name="description" content="vaked.dev — the constellation apex. A sovereign mesh of art, music, books, mathematics, and autonomous agents. Home of VAKED fair-launch proof-of-work utility token and the Sovereign Library.">
+<meta name="keywords" content="vaked, constellation, sovereign computing, proof of work, ERC-20, BitNet, MLX, mathematics, generative art, procedural audio">
+<meta name="author" content="Peter Lodri">
+<meta name="theme-color" content="#04060a">
+<link rel="canonical" href="https://vaked.dev/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vaked.dev/">
+<meta property="og:site_name" content="vaked.dev">
+<meta property="og:title" content="vaked.dev — the constellation">
+<meta property="og:description" content="A sovereign mesh of art, music, books, mathematics, and machine intelligence. Eight surfaces, one commons — self-hosted, self-owned, in the open.">
+<meta property="og:image" content="https://vaked.dev/assets/og-vaked.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="vaked.dev constellation network graph in deep space with glowing nodes and quantum data paths">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@0xp3t3rl">
+<meta name="twitter:creator" content="@0xp3t3rl">
+<meta name="twitter:title" content="vaked.dev — the constellation">
+<meta name="twitter:description" content="A sovereign mesh of art, music, books, mathematics, and machine intelligence. Home of VAKED and the Sovereign Library.">
+<meta name="twitter:image" content="https://vaked.dev/assets/og-vaked.jpg">
+
+<!-- Icons & Manifest -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="manifest" href="/manifest.webmanifest">
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://vaked.dev/#organization",
+      "name": "vaked.dev",
+      "url": "https://vaked.dev/",
+      "logo": "https://vaked.dev/favicon.svg",
+      "sameAs": [
+        "https://github.com/8b-is",
+        "https://github.com/peterlodri-sec",
+        "https://bsky.app/profile/0xp3t3rl.bsky.social"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://vaked.dev/#website",
+      "url": "https://vaked.dev/",
+      "name": "vaked.dev",
+      "description": "The constellation apex — a sovereign mesh of art, music, books, math, and intelligent agents.",
+      "publisher": { "@id": "https://vaked.dev/#organization" }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Constellation Nodes",
+      "itemListElement": [
+        { "@type": "SiteNavigationElement", "position": 1, "name": "Pocoo Sovereign Library", "url": "https://pocoo.vaked.dev" },
+        { "@type": "SiteNavigationElement", "position": 2, "name": "Music Synth & Soul Layer", "url": "https://music.vaked.dev" },
+        { "@type": "SiteNavigationElement", "position": 3, "name": "Generative Art & Secret NFT", "url": "https://art.vaked.dev" },
+        { "@type": "SiteNavigationElement", "position": 4, "name": "Physical Store & PoP Masters", "url": "https://store.vaked.dev" },
+        { "@type": "SiteNavigationElement", "position": 5, "name": "AxiomQuant Math & SLE", "url": "https://axiomquant.org" },
+        { "@type": "SiteNavigationElement", "position": 6, "name": "MLX-QUANT Metal BitNet", "url": "https://mlxquantlovefrom.com" },
+        { "@type": "SiteNavigationElement", "position": 7, "name": "Portail Sovereign Gateway", "url": "https://portail.vaked.dev" },
+        { "@type": "SiteNavigationElement", "position": 8, "name": "Transformers-Ultra", "url": "https://github.com/8b-is/transformers" },
+        { "@type": "SiteNavigationElement", "position": 9, "name": "Proposal Public Discourse", "url": "https://proposal.vaked.dev" },
+        { "@type": "SiteNavigationElement", "position": 10, "name": "Worklog Sovereign Fleet Board", "url": "https://worklog.vaked.dev" }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+  :root {
+    --bg: #04060a;
+    --panel: #0a0e14;
+    --panel-hover: #0f141c;
+    --teal: #2ff0e2;
+    --teal-glow: rgba(47, 240, 226, 0.25);
+    --teal-line: rgba(47, 240, 226, 0.2);
+    --gold: #e3b341;
+    --gold-glow: rgba(227, 179, 65, 0.2);
+    --purple: #a29bfe;
+    --blue: #58a6ff;
+    --green: #3fb950;
+    --dim: #7a8490;
+    --text: #e8edf2;
+    --line: rgba(122, 132, 144, 0.16);
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Interactive Constellation Background Canvas */
+  #constellation-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  ::selection { background: rgba(47, 240, 226, 0.28); color: var(--text); }
+  :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 4px; }
+
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--teal);
+    color: #04100e;
+    padding: 0.6rem 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 0 0 6px 0;
+    z-index: 100;
+  }
+  .skip:focus { left: 0; }
+
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .wrap { width: min(1120px, 100% - 3rem); margin-inline: auto; position: relative; z-index: 1; }
+
+  /* Load-in animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: rise 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  .d1 { animation-delay: 0.05s; }
+  .d2 { animation-delay: 0.15s; }
+  .d3 { animation-delay: 0.25s; }
+  .d4 { animation-delay: 0.35s; }
+  .d5 { animation-delay: 0.45s; }
+
+  @keyframes rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; animation: none; }
+  }
+
+  /* Telemetry Live Banner */
+  .telemetry-strip {
+    background: rgba(10, 14, 20, 0.85);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.45rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  .telemetry-status { display: flex; align-items: center; gap: 0.6rem; color: var(--dim); }
+  .beacon {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 10px var(--teal);
+    animation: pulse 2s infinite ease-in-out;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.8); }
+  }
+  .telemetry-links { display: flex; gap: 1.2rem; }
+  .telemetry-links a { color: var(--dim); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.05em; transition: color 0.2s; }
+  .telemetry-links a:hover { color: var(--teal); }
+
+  /* Header */
+  header {
+    padding: 1.8rem 0 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-family: var(--mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .brand .dot { color: var(--teal); }
+  .brand-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--teal-line);
+    border-radius: 4px;
+    color: var(--teal);
+    background: rgba(47, 240, 226, 0.05);
+  }
+  .topnav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .topnav a {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+  .topnav a:hover { color: var(--teal); text-decoration: none; }
+
+  /* Audio Synth HUD Button */
+  .audio-toggle {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(47, 240, 226, 0.06);
+    border: 1px solid var(--teal-line);
+    color: var(--teal);
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: all 0.2s ease;
+  }
+  .audio-toggle:hover { background: rgba(47, 240, 226, 0.15); border-color: var(--teal); }
+  .audio-toggle.active { background: var(--teal); color: #04100e; font-weight: 700; }
+
+  /* Hero Section */
+  .hero {
+    padding: clamp(3.5rem, 8vw, 6rem) 0 clamp(2.5rem, 6vw, 4.5rem);
+    text-align: center;
+  }
+
+  .chart {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: clamp(0.55rem, 1.4vw, 0.72rem);
+    line-height: 1.35;
+    color: var(--dim);
+    text-align: left;
+    padding: 1.1rem 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(10, 14, 20, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    overflow-x: auto;
+    max-width: 100%;
+    margin-bottom: 2.2rem;
+  }
+  .chart .spine { color: var(--teal); }
+  .chart .apex { color: var(--teal); font-weight: 700; }
+  .chart .node { color: var(--text); }
+  .chart .gold { color: var(--gold); }
+
+  h1 {
+    font-size: clamp(2.8rem, 8.5vw, 4.8rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+  }
+  h1 .dim { color: var(--dim); font-weight: 500; }
+
+  .tagline {
+    margin-top: 1.3rem;
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    color: #c6cdd6;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .lede {
+    margin: 1.1rem auto 0;
+    max-width: 38rem;
+    color: var(--dim);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    margin-top: 2.4rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+  }
+  .btn:hover { text-decoration: none; }
+  .btn-primary {
+    background: var(--teal);
+    color: #04100e;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(47, 240, 226, 0.2);
+  }
+  .btn-primary:hover { background: #5cf5e9; transform: translateY(-2px); box-shadow: 0 14px 38px rgba(47, 240, 226, 0.3); }
+  .btn-ghost { border-color: var(--teal-line); color: var(--teal); background: rgba(47, 240, 226, 0.04); }
+  .btn-ghost:hover { background: rgba(47, 240, 226, 0.12); transform: translateY(-2px); border-color: var(--teal); }
+
+  /* Sections */
+  section.block { padding: clamp(3rem, 6vw, 4.5rem) 0; }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+  }
+
+  .block-body { max-width: 42rem; }
+  .block-body p { color: var(--dim); margin-top: 1rem; font-size: 0.96rem; line-height: 1.7; }
+
+  .proof {
+    margin-top: 1.8rem;
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    color: var(--teal);
+    padding: 1.1rem 1.4rem;
+    border-left: 2px solid var(--teal);
+    background: rgba(47, 240, 226, 0.04);
+    border-radius: 0 8px 8px 0;
+    max-width: 42rem;
+  }
+  .proof::before { content: "> "; opacity: 0.7; }
+
+  .block-actions { margin-top: 1.8rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+  .note {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--dim);
+  }
+  .note a { border-bottom: 1px solid var(--teal-line); }
+
+  .token-block {
+    background: linear-gradient(180deg, rgba(10, 14, 20, 0.85), rgba(10, 14, 20, 0.5));
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Constellation Grid */
+  .grid {
+    margin-top: 2.6rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 1.2rem;
+  }
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.4rem 1.4rem 1.5rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    border-color: var(--teal-line);
+    background: var(--panel-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 20px var(--teal-glow);
+    text-decoration: none;
+  }
+  .card .idx {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--dim);
+  }
+  .card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    transition: color 0.2s ease;
+  }
+  .card:hover h3 { color: var(--teal); }
+  .card .desc { font-size: 0.88rem; color: var(--dim); line-height: 1.55; flex: 1; }
+  .card .go {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    opacity: 0.85;
+    margin-top: 0.4rem;
+  }
+  .card .go::after { content: " →"; }
+  .card:hover .go { opacity: 1; }
+  .card .tag {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.1rem;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid var(--teal-line);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    background: rgba(47, 240, 226, 0.08);
+  }
+  .card .tag.gold {
+    color: var(--gold);
+    border-color: rgba(227, 179, 65, 0.3);
+    background: rgba(227, 179, 65, 0.08);
+  }
+
+  /* Footer */
+  footer {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding: 3.5rem 1.5rem 3rem;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    background: rgba(4, 6, 10, 0.95);
+    position: relative;
+    z-index: 1;
+  }
+  .lovetta {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--purple);
+    font-weight: 600;
+  }
+  .weights {
+    margin-top: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .sisters {
+    margin-top: 1.8rem;
+    display: flex;
+    gap: 0.5rem 1.4rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+  }
+  .sisters a {
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.18s ease;
+    padding: 0.2rem 0.1rem;
+  }
+  .sisters a:hover { color: var(--teal); text-decoration: none; }
+  .sig {
+    margin-top: 2rem;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #59636f;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { width: calc(100% - 2.4rem); }
+    .topnav { gap: 1rem; }
+    .telemetry-strip { flex-direction: column; gap: 0.4rem; align-items: flex-start; }
+    .card .tag { position: static; align-self: flex-start; margin-top: 0.2rem; }
+  }
+</style>
+</head>
+<body id="top">
+
+<canvas id="constellation-canvas" aria-hidden="true"></canvas>
+
+<div class="telemetry-strip" role="status" aria-live="polite">
+  <div class="telemetry-status">
+    <div class="beacon" aria-hidden="true"></div>
+    <span>ALL 9 CONSTELLATION NODES OPERATIONAL · 0.5597 SYNC</span>
+  </div>
+  <div class="telemetry-links">
+    <button class="audio-toggle" id="audio-btn" aria-label="Toggle 432Hz Ambient Resonance Chord">
+      <span>♫</span> <span id="audio-btn-text">432Hz Soundscape</span>
+    </button>
+    <a href="https://github.com/8b-is/transformers" target="_blank" rel="noopener noreferrer">github:8b-is</a>
+  </div>
+</div>
+
+<a class="skip" href="#main">skip to content</a>
+
+<header class="wrap reveal d1">
+  <a class="brand" href="#top">
+    <span>vaked<span class="dot">.</span>dev</span>
+    <span class="brand-badge">APEX HUB</span>
+  </a>
+  <nav class="topnav" aria-label="On this page">
+    <a href="#token">the token</a>
+    <a href="#library">library</a>
+    <a href="#constellation">constellation</a>
+    <a href="/whitepaper">whitepaper</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- 01 · hero -->
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <pre class="chart reveal d1" aria-hidden="true"><span class="node">             art</span>
+<span class="spine">              │</span>
+<span class="node">   music</span><span class="spine"> ─────</span><span class="apex">●</span><span class="spine">───── </span><span class="node">pocoo</span>
+<span class="spine">              │</span>
+<span class="node">   store</span><span class="spine"> ─────</span><span class="spine">┼</span><span class="spine">───── </span><span class="node">proposal</span>
+<span class="spine">              │</span>
+<span class="node">   quant</span><span class="spine"> ─────</span><span class="spine">┼</span><span class="spine">───── </span><span class="node">axiom</span>
+<span class="spine">              │</span>
+<span class="node">      <span class="gold">8b-is</span> ──┼── portail</span></pre>
+
+    <h1 id="hero-title" class="reveal d2">vaked<span class="dim">.dev</span></h1>
+    <p class="tagline reveal d3">the constellation — a sovereign mesh of art, music, books, math, and machine intelligence</p>
+    <p class="lede reveal d4">Nine surfaces, one commons. Self-hosted, self-owned, rendered in the open — zero paywalls, zero closed gates, verified from first principles.</p>
+
+    <div class="hero-actions reveal d5">
+      <a class="btn btn-primary" href="/whitepaper">Read the whitepaper</a>
+      <a class="btn btn-ghost" href="#constellation">Explore the surfaces</a>
+    </div>
+  </section>
+
+  <!-- 02 · VAKED token -->
+  <section class="block token-block" id="token" aria-labelledby="token-title">
+    <div class="wrap">
+      <p class="kicker reveal d1">[ 01 · the token ]</p>
+      <h2 class="reveal d2" id="token-title">VAKED</h2>
+      <div class="block-body reveal d3">
+        <p>A fair-launch, proof-of-work-minted utility token on Polygon — the constellation&rsquo;s sovereign accounting for presence, provenance, and contribution. It is earned by solving verifiable cryptographic challenges and spent on the commons. No premine, no team allocation, fixed 21,000,000 supply.</p>
+        <p class="proof">Not an investment. Proof of presence for the Sovereign Commons.</p>
+      </div>
+      <div class="block-actions reveal d4">
+        <a class="btn btn-primary" href="/whitepaper">Read the whitepaper</a>
+        <span class="note">mechanism, halving, and attestation — <a href="/whitepaper">in the open</a></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Sovereign Library -->
+  <section class="block" id="library" aria-labelledby="library-title">
+    <div class="wrap">
+      <p class="kicker reveal d1">[ 02 · the first utility ]</p>
+      <h2 class="reveal d2" id="library-title">Sovereign Library</h2>
+      <div class="block-body reveal d3">
+        <p>The Sovereign Library at <strong>pocoo.vaked.dev</strong> is the first utility of the VAKED token — 37 free volumes, zero DRM, zero gated reading. VAKED adds the cryptographic attestation layer on top: proof of presence, provenance, and reader timestamping without enclosing human knowledge.</p>
+      </div>
+      <div class="block-actions reveal d4">
+        <a class="btn btn-ghost" href="https://pocoo.vaked.dev" target="_blank" rel="noopener noreferrer">Visit the Sovereign Library</a>
+        <span class="note">free to read, forever — <a href="https://pocoo.vaked.dev" target="_blank" rel="noopener noreferrer">pocoo.vaked.dev</a></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · constellation grid -->
+  <section class="block" id="constellation" aria-labelledby="grid-title">
+    <div class="wrap">
+      <p class="kicker reveal d1">[ 03 · the constellation ]</p>
+      <h2 class="reveal d2" id="grid-title">Nine surfaces, one commons</h2>
+      <p class="lede reveal d3" style="margin-left:0;">Every surface is its own repo, its own deployment, its own frontier — the apex is the sovereign front door.</p>
+
+      <div class="grid">
+        <a class="card reveal d1" href="https://pocoo.vaked.dev" target="_blank" rel="noopener noreferrer">
+          <span class="idx">01</span>
+          <h3>pocoo.vaked.dev</h3>
+          <span class="desc">The Sovereign Library — 37 free volumes, no paywall, no DRM, on-chain presence stamps.</span>
+          <span class="go">visit library</span>
+          <span class="tag">utility #1</span>
+        </a>
+        <a class="card reveal d2" href="https://music.vaked.dev" target="_blank" rel="noopener noreferrer">
+          <span class="idx">02</span>
+          <h3>music.vaked.dev</h3>
+          <span class="desc">Procedural Web Audio synthesizer, 432Hz heart resonance, and interactive soul poetry layer.</span>
+          <span class="go">listen</span>
+          <span class="tag">432Hz</span>
+        </a>
+        <a class="card reveal d3" href="https://art.vaked.dev" target="_blank" rel="noopener noreferrer">
+          <span class="idx">03</span>
+          <h3>art.vaked.dev</h3>
+          <span class="desc">Generative visual canvas, procedural stroke-to-SVG engine, and PaintingsForSecrets NFT layer.</span>
+          <span class="go">explore art</span>
+        </a>
+        <a class="card reveal d4" href="https://store.vaked.dev" target="_blank" rel="noopener noreferrer">
+          <span class="idx">04</span>
+          <h3>store.vaked.dev</h3>
+          <span class="desc">Physical vinyl masters, archival gallery prints, and Web3 MetaMask + Alchemy PoP claims.</span>
+          <span class="go">visit store</span>
+          <span class="tag">Web3 PoP</span>
+        </a>
+        <a class="card reveal d1" href="https://axiomquant.org" target="_blank" rel="noopener noreferrer">
+          <span class="idx">05</span>
+          <h3>axiomquant.org</h3>
+          <span class="desc">Mathematical foundations — SLE_κ Schramm-Loewner scalograms, 2D heatmaps, and formal proofs.</span>
+          <span class="go">explore math</span>
+        </a>
+        <a class="card reveal d2" href="https://mlxquantlovefrom.com" target="_blank" rel="noopener noreferrer">
+          <span class="idx">06</span>
+          <h3>mlxquantlovefrom.com</h3>
+          <span class="desc">Metal BitNet b1.58 GEMV, UMA memory bandwidth saturation, and zero-allocation inference.</span>
+          <span class="go">quant love</span>
+        </a>
+        <a class="card reveal d3" href="https://portail.vaked.dev" target="_blank" rel="noopener noreferrer">
+          <span class="idx">07</span>
+          <h3>portail.vaked.dev</h3>
+          <span class="desc">Sovereign API gateway — Ed25519 cryptographic tokens, rate limiting, and fleet routing.</span>
+          <span class="go">gateway</span>
+        </a>
+        <a class="card reveal d4" href="https://github.com/8b-is/transformers" target="_blank" rel="noopener noreferrer">
+          <span class="idx">08</span>
+          <h3>8b-is/transformers</h3>
+          <span class="desc">Transformers-Ultra — 1.58-bit BitNet ternary kernels, MEM8 wave memory, zero AST generation.</span>
+          <span class="go">github repo</span>
+          <span class="tag gold">ultra fork</span>
+        </a>
+        <a class="card reveal d1" href="https://proposal.vaked.dev" target="_blank" rel="noopener noreferrer">
+          <span class="idx">09</span>
+          <h3>proposal.vaked.dev</h3>
+          <span class="desc">Public discourse, technical theses, and sovereign arguments written in the open.</span>
+          <span class="go">read theses</span>
+        </a>
+        <a class="card reveal d2" href="https://worklog.vaked.dev" target="_blank" rel="noopener noreferrer">
+          <span class="idx">10</span>
+          <h3>worklog.vaked.dev</h3>
+          <span class="desc">Append-only engineering worklog board — daily commits, kernel updates, and fleet milestones.</span>
+          <span class="go">view worklogs</span>
+          <span class="tag">fleet log</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer role="contentinfo">
+  <div class="lovetta">the constellation · lovetta lane</div>
+  <div class="weights">keep the weights warm</div>
+  <nav class="sisters" aria-label="Constellation sister sites">
+    <a href="https://pocoo.vaked.dev" target="_blank" rel="noopener noreferrer">pocoo.vaked.dev</a>
+    <a href="https://worklog.vaked.dev" target="_blank" rel="noopener noreferrer">worklog.vaked.dev</a>
+    <a href="https://music.vaked.dev" target="_blank" rel="noopener noreferrer">music.vaked.dev</a>
+    <a href="https://art.vaked.dev" target="_blank" rel="noopener noreferrer">art.vaked.dev</a>
+    <a href="https://store.vaked.dev" target="_blank" rel="noopener noreferrer">store.vaked.dev</a>
+    <a href="https://axiomquant.org" target="_blank" rel="noopener noreferrer">axiomquant.org</a>
+    <a href="https://mlxquantlovefrom.com" target="_blank" rel="noopener noreferrer">mlxquantlovefrom.com</a>
+    <a href="https://portail.vaked.dev" target="_blank" rel="noopener noreferrer">portail.vaked.dev</a>
+    <a href="https://github.com/8b-is/transformers" target="_blank" rel="noopener noreferrer">8b-is/transformers</a>
+    <a href="https://proposal.vaked.dev" target="_blank" rel="noopener noreferrer">proposal.vaked.dev</a>
+  </nav>
+  <div class="sig">the constellation · 0 + 1 · fine touch from within · vaked.dev</div>
+</footer>
+
+<script>
+// --- Procedural 60fps Interactive Constellation Background Canvas ---
+(function() {
+  const canvas = document.getElementById('constellation-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let w = 0, h = 0;
+  let particles = [];
+  const count = Math.min(65, Math.floor((window.innerWidth * window.innerHeight) / 22000));
+  let mouse = { x: -1000, y: -1000, active: false };
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  });
+  window.addEventListener('mouseleave', () => { mouse.active = false; });
+
+  class Node {
+    constructor() {
+      this.x = Math.random() * w;
+      this.y = Math.random() * h;
+      this.vx = (Math.random() - 0.5) * 0.45;
+      this.vy = (Math.random() - 0.5) * 0.45;
+      this.radius = Math.random() * 2 + 1;
+      this.baseAlpha = Math.random() * 0.4 + 0.2;
+      this.isGold = Math.random() < 0.15;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0) this.x = w;
+      if (this.x > w) this.x = 0;
+      if (this.y < 0) this.y = h;
+      if (this.y > h) this.y = 0;
+
+      // Mouse proximity interaction
+      if (mouse.active) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140) {
+          const force = (140 - dist) / 140;
+          this.x -= (dx / dist) * force * 1.5;
+          this.y -= (dy / dist) * force * 1.5;
+        }
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.isGold
+        ? `rgba(227, 179, 65, ${this.baseAlpha})`
+        : `rgba(47, 240, 226, ${this.baseAlpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < count; i++) {
+    particles.push(new Node());
+  }
+
+  let animationFrame;
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+
+    // Draw lines between proximate nodes
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 130) {
+          const alpha = (1 - dist / 130) * 0.16;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(47, 240, 226, ${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Update & draw particles
+    for (let p of particles) {
+      p.update();
+      p.draw();
+    }
+
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    animate();
+  }
+})();
+
+// --- Web Audio 432Hz Pythagorean Heart Resonance Soundscape ---
+(function() {
+  const btn = document.getElementById('audio-btn');
+  const btnText = document.getElementById('audio-btn-text');
+  if (!btn || !btnText) return;
+
+  let audioCtx = null;
+  let isPlaying = false;
+  let gainNode = null;
+
+  btn.addEventListener('click', function() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    if (!isPlaying) {
+      gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 2);
+      gainNode.connect(audioCtx.destination);
+
+      // Pythagorean 432Hz D - A - F# chord
+      const freqs = [432, 576, 648];
+      freqs.forEach(function(freq) {
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.connect(gainNode);
+        osc.start();
+      });
+
+      isPlaying = true;
+      btn.classList.add('active');
+      btnText.textContent = '432Hz Active';
+    } else {
+      if (gainNode) {
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
+        setTimeout(function() {
+          if (audioCtx) audioCtx.close();
+          audioCtx = null;
+        }, 1000);
+      }
+      isPlaying = false;
+      btn.classList.remove('active');
+      btnText.textContent = '432Hz Soundscape';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
