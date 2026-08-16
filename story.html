@@ -6,22 +6,119 @@
 <title>Story — vaked.dev</title>
 <meta name="description" content="The story of vaked.dev: a constellation of sovereign surfaces, and the fair-launch proof-of-work token VAKED.">
 <style>
-:root{--bg:#0a0e14;--surface:#12171f;--border:#252d3a;--text:#c9d1d9;--text2:#7a8490;--accent:#58a6ff;--amber:#d29922;--green:#3fb950}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;max-width:720px;margin:0 auto;padding:52px 22px 72px}
-a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-h1{font-size:1.7rem;font-weight:700;margin-bottom:6px}
-h2{font-size:1.12rem;font-weight:600;margin:26px 0 8px}
-p,li{color:var(--text2);font-size:0.95rem}p{margin-bottom:14px}
-ul{margin:0 0 14px 20px}li{margin-bottom:6px}
-.nav{margin-bottom:28px;font-size:0.88rem;color:var(--text2)}
-.nav a{color:var(--text2);margin-right:14px}
-.nav a:hover{color:var(--accent)}
-footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--border);font-size:0.78rem;color:var(--text2);text-align:center}
+  :root {
+    --bg: #0a0e14;
+    --surface: #12171f;
+    --surface-2: #10151d;
+    --border: #252d3a;
+    --line: rgba(122, 132, 144, 0.16);
+    --text: #c9d1d9;
+    --muted: #7a8490;
+    --accent: #58a6ff;
+    --amber: #d29922;
+    --green: #3fb950;
+    --red: #f85149;
+    --radius: 12px;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  .wrap { width: min(720px, 100% - 2.5rem); margin-inline: auto; }
+  main { flex: 1; padding: clamp(1.2rem, 4vw, 2.4rem) 0 1rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ::selection { background: rgba(88, 166, 255, 0.28); color: var(--text); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  /* Header */
+  .site-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem 1.5rem;
+    flex-wrap: wrap;
+    width: min(720px, 100% - 2.5rem);
+    margin-inline: auto;
+    padding: 1.7rem 0 0.5rem;
+  }
+  .brand { font-family: var(--mono); font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; color: var(--text); }
+  .brand:hover { text-decoration: none; color: var(--accent); }
+  .brand .dot { color: var(--accent); }
+  .nav { display: flex; gap: 0.1rem 1.1rem; flex-wrap: wrap; align-items: baseline; }
+  .nav a {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    padding: 0.2rem 0;
+    transition: color 0.18s ease;
+  }
+  .nav a:hover { color: var(--accent); text-decoration: none; }
+  .nav a[aria-current="page"] { color: var(--text); box-shadow: inset 0 -1px 0 var(--accent); }
+
+  /* Typography */
+  h1 { font-size: clamp(1.9rem, 5vw, 2.4rem); font-weight: 750; letter-spacing: -0.025em; line-height: 1.12; margin-bottom: 1.2rem; }
+  h2 { font-size: clamp(1.14rem, 3.2vw, 1.34rem); font-weight: 650; letter-spacing: -0.015em; line-height: 1.3; margin: 2.4rem 0 0.8rem; }
+  h3 { font-size: 1.04rem; font-weight: 650; margin: 1.8rem 0 0.55rem; }
+  p { color: var(--muted); font-size: 0.97rem; line-height: 1.75; margin-bottom: 1rem; }
+  strong { color: var(--text); font-weight: 650; }
+  em { color: var(--text); }
+  ul, ol { color: var(--muted); font-size: 0.97rem; margin: 0 0 1.2rem 1.3rem; }
+  li { margin-bottom: 0.5rem; line-height: 1.7; }
+  li strong { color: var(--text); }
+
+  /* Footer */
+  .site-foot {
+    margin-top: clamp(2.8rem, 6vw, 4.5rem);
+    padding: 2rem 1.5rem 2.6rem;
+    border-top: 1px solid var(--line);
+    background: rgba(10, 14, 20, 0.6);
+    text-align: center;
+  }
+  .foot-nav { display: flex; gap: 0.35rem 1.35rem; justify-content: center; flex-wrap: wrap; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; }
+  .foot-nav a { color: var(--muted); text-decoration: none; }
+  .foot-nav a:hover { color: var(--accent); text-decoration: none; }
+  .sig { margin-top: 1.5rem; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: #59636f; }
+
+  @media (max-width: 560px) {
+    .site-head { flex-direction: column; align-items: flex-start; gap: 0.9rem; }
+    .nav { gap: 0.15rem 0.9rem; }
+    .nav a { letter-spacing: 0.08em; }
+    .foot-nav { gap: 0.3rem 1rem; }
+  }
 </style>
 </head>
 <body>
-<p class="nav"><a href="/">vaked.dev</a><a href="/whitepaper">whitepaper</a><a href="/verify">verify</a><a href="/about">about</a><a href="/privacy">privacy</a><a href="/security">security</a><a href="/legal">legal</a></p>
+<header class="site-head">
+  <a class="brand" href="/">vaked<span class="dot">.</span>dev</a>
+  <nav class="nav" aria-label="Site pages">
+    <a href="/whitepaper">whitepaper</a>
+    <a href="/verify">verify</a>
+    <a href="/story" aria-current="page">story</a>
+    <a href="/about">about</a>
+    <a href="/privacy">privacy</a>
+    <a href="/security">security</a>
+    <a href="/legal">legal</a>
+  </nav>
+</header>
+
+<main class="wrap">
 <h1>Story</h1>
 
 <p>vaked.dev began as a refusal — a refusal to let knowledge, art, and compute be enclosed behind paywalls and black boxes.</p>
@@ -35,7 +132,20 @@ footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--border);font-
 <p>It launched on Polygon in 2026 as a <strong>fair launch</strong>: no premine, no team allocation, no presale, no issuer-held reserve. The first 21,000,000 VAKED are mined entirely by anyone willing to solve the challenge — one 50-VAKED reward at a time, halving every 210,000 mints, until the cap is reached.</p>
 
 <p>That's the whole story so far: a commons that earns its own attestation, in the open.</p>
+</main>
 
-<footer><p><a href="/">← vaked.dev</a> · <a href="/about">about</a> · <a href="/privacy">privacy</a> · <a href="/security">security</a> · <a href="/legal">legal</a></p></footer>
+<footer class="site-foot">
+  <nav class="foot-nav" aria-label="Site pages">
+    <a href="/">← vaked.dev</a>
+    <a href="/whitepaper">whitepaper</a>
+    <a href="/verify">verify</a>
+    <a href="/story">story</a>
+    <a href="/about">about</a>
+    <a href="/privacy">privacy</a>
+    <a href="/security">security</a>
+    <a href="/legal">legal</a>
+  </nav>
+  <p class="sig">the constellation · 0 + 1 · fine touch from within · vaked.dev</p>
+</footer>
 </body>
 </html>

@@ -328,6 +328,25 @@
     align-items: center;
   }
 
+  .hero-meta {
+    margin-top: 1.6rem;
+    display: flex;
+    gap: 0.4rem 1.1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .hero-meta a {
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.18s ease;
+    padding: 0.15rem 0.1rem;
+  }
+  .hero-meta a:hover { color: var(--teal); text-decoration: none; }
+
   .btn {
     font-family: var(--mono);
     font-size: 0.78rem;
@@ -599,6 +618,15 @@
       <a class="btn btn-ghost" href="#constellation">Explore the surfaces</a>
       <a class="btn btn-ghost" href="/llms.txt" target="_blank" style="border-color:rgba(227,179,65,0.4);color:var(--gold)">llms.txt standard</a>
     </div>
+
+    <nav class="hero-meta reveal d5" aria-label="Site pages">
+      <a href="/verify">verify</a>
+      <a href="/story">story</a>
+      <a href="/about">about</a>
+      <a href="/security">security</a>
+      <a href="/privacy">privacy</a>
+      <a href="/legal">legal</a>
+    </nav>
   </section>
 
   <!-- 02 · VAKED token -->
