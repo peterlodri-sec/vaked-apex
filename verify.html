@@ -148,6 +148,23 @@
   #result.checking .detail { animation: blink 1.4s ease-in-out infinite; }
   @keyframes blink { 50% { opacity: 0.45; } }
 
+  /* Verify-result states (text-only, mirroring #result) */
+  #vresult {
+    display: none;
+    margin-top: 0.9rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    background: var(--bg);
+    font-size: 0.88rem;
+    word-break: break-word;
+  }
+  #vresult.ok { display: block; border-left-color: var(--green); background: rgba(63, 185, 80, 0.06); color: var(--green); }
+  #vresult.warn { display: block; border-left-color: var(--amber); background: rgba(210, 153, 34, 0.07); color: var(--amber); }
+  #vresult.err { display: block; border-left-color: var(--red); background: rgba(248, 81, 73, 0.07); color: var(--red); }
+  #vresult.checking { display: block; color: var(--muted); }
+
   code {
     font-family: var(--mono);
     font-size: 0.84rem;
@@ -207,7 +224,7 @@
   <div class="detail" style="margin-top:4px;">
     Token contract <code>0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A</code> on Polygon — exact (full) match.
     <div class="links">
-      <a href="https://repo.sourcify.dev/contracts/full_match/137/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A/" target="_blank" rel="noopener noreferrer">View on Sourcify →</a>
+      <a href="https://repo.sourcify.dev/137/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A" target="_blank" rel="noopener noreferrer">View on Sourcify →</a>
       <a href="https://polygonscan.com/address/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A" target="_blank" rel="noopener noreferrer">View on Polygonscan →</a>
     </div>
   </div>
@@ -233,13 +250,28 @@
   <div id="result" role="status"></div>
 </div>
 
-<h2>Verify your own contract</h2>
+<h2>Verify a contract</h2>
 <div class="card">
-  <p class="detail" style="margin-bottom:8px;">Submit a Solidity or Vyper contract for source verification. Full-match verification proves the deployed bytecode matches the published source.</p>
-  <div class="links">
-    <a href="https://verify.sourcify.dev" target="_blank" rel="noopener noreferrer">Open Sourcify verifier →</a>
-    <a href="https://sourcify.dev" target="_blank" rel="noopener noreferrer">Browse all verified contracts →</a>
+  <p class="detail" style="margin-bottom:10px;">Submit a contract for source verification via the Sourcify API — provide the standard JSON input, compiler version, and contract identifier.</p>
+  <div class="field" style="margin-bottom:8px;">
+    <select id="vchain" aria-label="Verify chain">
+      <option value="137" selected>Polygon (137)</option>
+      <option value="1">Ethereum (1)</option>
+      <option value="8453">Base (8453)</option>
+      <option value="42161">Arbitrum One (42161)</option>
+      <option value="10">Optimism (10)</option>
+      <option value="534352">Scroll (534352)</option>
+      <option value="59144">Linea (59144)</option>
+      <option value="324">zkSync Era (324)</option>
+      <option value="1101">Polygon zkEVM (1101)</option>
+    </select>
+    <input type="text" id="vaddress" placeholder="0x… contract address" spellcheck="false" autocomplete="off" aria-label="Verify contract address">
   </div>
+  <input type="text" id="vcompiler" placeholder="compiler version (e.g. 0.8.28+commit.7893614a)" spellcheck="false" autocomplete="off" style="width:100%;margin-bottom:8px;">
+  <input type="text" id="videntifier" placeholder="contract identifier (e.g. VAKED.sol:VAKED)" spellcheck="false" autocomplete="off" style="width:100%;margin-bottom:8px;">
+  <textarea id="vstdjson" rows="6" spellcheck="false" placeholder='{"language":"Solidity","sources":{"File.sol":{"content":"// SPDX-License-Identifier: MIT\n"}},"settings":{"optimizer":{"enabled":true,"runs":200}}}' style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:0.62rem 0.8rem;font-family:var(--mono,ui-monospace,monospace);font-size:0.82rem;margin-bottom:10px;box-sizing:border-box;"></textarea>
+  <button id="vsubmit" type="button">Verify</button>
+  <div id="vresult" role="status"></div>
 </div>
 </main>
 
@@ -296,14 +328,14 @@
     chk.textContent = 'Checking…';
     result.append(chk);
     try {
-      const res = await fetch('https://sourcify.dev/server/v2/contract/' + chain + '/' + addr);
+      const res = await fetch('https://sourcify.dev/server/v2/contract/' + chain + '/' + addr + '?fields=all');
       if (res.ok) {
         const d = await res.json();
         const full = d.match === 'exact_match';
         const partial = d.match === 'partial_match';
         if (!full && !partial) { show('err', 'Unexpected response', 'Sourcify returned an unknown match type.'); return; }
         const label = full ? 'exact (full) match' : 'partial match';
-        const repo = 'https://repo.sourcify.dev/contracts/' + (full ? 'full_match' : 'partial_match') + '/' + chain + '/' + addr + '/';
+        const repo = 'https://repo.sourcify.dev/' + chain + '/' + addr;
         const date = d.verifiedAt ? new Date(d.verifiedAt).toISOString().slice(0, 10) : '';
         show('ok', '✓ Verified — ' + label, 'Verified ' + date + '.', { href: repo, text: 'View verified source →' });
       } else if (res.status === 404) {
@@ -318,6 +350,67 @@
 
   document.getElementById('check').addEventListener('click', check);
   addrInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+
+  // ---- verify (submit via the Sourcify API) ----
+  const vresult = document.getElementById('vresult');
+  function vshow(cls, text) {
+    vresult.className = cls;
+    vresult.style.display = 'block';
+    vresult.textContent = text;
+  }
+
+  async function submitVerify() {
+    const addr = document.getElementById('vaddress').value.trim();
+    const chain = document.getElementById('vchain').value;
+    const compiler = document.getElementById('vcompiler').value.trim();
+    const identifier = document.getElementById('videntifier').value.trim();
+    const stdText = document.getElementById('vstdjson').value.trim();
+    if (!ADDR_RE.test(addr)) { vshow('err', 'Enter a valid 0x contract address.'); return; }
+    if (!compiler) { vshow('err', 'Enter the compiler version (e.g. 0.8.28+commit.7893614a).'); return; }
+    if (!identifier) { vshow('err', 'Enter the contract identifier (e.g. VAKED.sol:VAKED).'); return; }
+    let stdJsonInput;
+    try { stdJsonInput = JSON.parse(stdText); } catch { vshow('err', 'Standard JSON input must be valid JSON.'); return; }
+    if (!stdJsonInput || !stdJsonInput.sources) { vshow('err', 'Standard JSON input must include a "sources" object.'); return; }
+
+    vshow('checking', 'Submitting verification…');
+    try {
+      const resp = await fetch('https://sourcify.dev/server/v2/verify/' + chain + '/' + addr, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stdJsonInput, compilerVersion: compiler, contractIdentifier: identifier }),
+      });
+      const d = await resp.json();
+      if (!resp.ok || !d.verificationId) {
+        vshow('err', 'Verification rejected: ' + (d.error || d.message || ('HTTP ' + resp.status)));
+        return;
+      }
+      vshow('checking', 'Submitted — waiting for the result…');
+      const repo = 'https://repo.sourcify.dev/' + chain + '/' + addr;
+      for (let i = 0; i < 12; i++) {
+        await new Promise(function (r) { setTimeout(r, 3000); });
+        const st = await fetch('https://sourcify.dev/server/v2/verify/' + d.verificationId);
+        const sd = await st.json();
+        const s = String((sd && sd.status) || '').toLowerCase();
+        if (s === 'perfect' || s === 'exact_match' || s === 'full' || s === 'exact') {
+          vshow('ok', '✓ Verified — exact (full) match. View: ' + repo);
+          return;
+        }
+        if (s === 'partial' || s === 'partial_match' || s === 'match') {
+          vshow('warn', 'Partially verified (match). View: ' + repo);
+          return;
+        }
+        if (sd && (sd.error || sd.message)) {
+          vshow('err', 'Verification failed: ' + (sd.error || sd.message));
+          return;
+        }
+      }
+      vshow('warn', 'Still processing — check ' + repo);
+    } catch (e) {
+      vshow('err', 'Network error — could not reach Sourcify.');
+    }
+  }
+
+  document.getElementById('vsubmit').addEventListener('click', submitVerify);
 </script>
 </body>
 </html>
