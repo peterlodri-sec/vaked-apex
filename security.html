@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security — vaked.dev</title>
+<meta name="description" content="Security policy for vaked.dev: open source, source-verified, immutable fair launch, and responsible disclosure.">
+<style>
+:root{--bg:#0a0e14;--surface:#12171f;--border:#252d3a;--text:#c9d1d9;--text2:#7a8490;--accent:#58a6ff;--amber:#d29922;--green:#3fb950;--red:#f85149}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;max-width:720px;margin:0 auto;padding:52px 22px 72px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+h1{font-size:1.7rem;font-weight:700;margin-bottom:6px}
+h2{font-size:1.12rem;font-weight:600;margin:26px 0 8px}
+p,li{color:var(--text2);font-size:0.95rem}p{margin-bottom:14px}
+ul{margin:0 0 14px 20px}li{margin-bottom:6px}
+.nav{margin-bottom:28px;font-size:0.88rem;color:var(--text2)}
+.nav a{color:var(--text2);margin-right:14px}
+.nav a:hover{color:var(--accent)}
+footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--border);font-size:0.78rem;color:var(--text2);text-align:center}
+</style>
+</head>
+<body>
+<p class="nav"><a href="/">vaked.dev</a><a href="/whitepaper">whitepaper</a><a href="/verify">verify</a><a href="/story">story</a><a href="/about">about</a><a href="/privacy">privacy</a><a href="/legal">legal</a></p>
+<h1>Security</h1>
+
+<p>Security is a first-class concern. Here is our posture, in plain terms.</p>
+
+<h2>The VAKED contract</h2>
+<ul>
+  <li><strong>Open source</strong> — the full source is published in the <a href="https://github.com/peterlodri-sec/pocoo.vaked.dev" target="_blank" rel="noopener noreferrer">pocoo.vaked.dev repository</a>.</li>
+  <li><strong>Source-verified</strong> — the deployed bytecode is verified as an <a href="https://repo.sourcify.dev/contracts/full_match/137/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A/" target="_blank" rel="noopener noreferrer">exact (full) match on Sourcify</a>.</li>
+  <li><strong>Regression-tested</strong> — the mint, difficulty-adjustment, and supply logic is covered by Foundry and Hardhat test suites.</li>
+  <li><strong>Immutable after renounce</strong> — once ownership is renounced to the zero address, there is <em>no admin key, no pause, no upgrade path</em>. That is the point, and it is also a responsibility: the code must be right before that final step.</li>
+</ul>
+
+<h2>Responsible disclosure</h2>
+<p>If you find a vulnerability — in the contract, the site, or any surface — please email <a href="mailto:peter.lodri@gmail.com">peter.lodri@gmail.com</a>. Do not exploit it publicly; give us a reasonable window to respond and fix before disclosure.</p>
+
+<p>There is no formal bug bounty at this time, but genuine, responsibly-reported findings are appreciated and credited.</p>
+
+<footer><p><a href="/">← vaked.dev</a> · <a href="/about">about</a> · <a href="/privacy">privacy</a> · <a href="/legal">legal</a></p></footer>
+</body>
+</html>
