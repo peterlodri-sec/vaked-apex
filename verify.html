@@ -263,10 +263,25 @@
   const addrInput = document.getElementById('address');
   const chainSelect = document.getElementById('chain');
 
-  function show(cls, status, html) {
+  function show(cls, status, detailText, link) {
     result.className = cls;
     result.style.display = 'block';
-    result.innerHTML = '<div class="status">' + status + '</div><div class="detail">' + html + '</div>';
+    result.textContent = '';
+    const statusEl = document.createElement('div');
+    statusEl.className = 'status';
+    statusEl.textContent = status;
+    const detailEl = document.createElement('div');
+    detailEl.className = 'detail';
+    detailEl.textContent = detailText;
+    result.append(statusEl, detailEl);
+    if (link) {
+      const a = document.createElement('a');
+      a.href = link.href;
+      a.textContent = link.text;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      detailEl.append(' ', a);
+    }
   }
 
   async function check() {
@@ -275,21 +290,24 @@
     const chain = chainSelect.value;
     result.className = 'checking';
     result.style.display = 'block';
-    result.innerHTML = '<div class="detail">Checking…</div>';
+    result.textContent = '';
+    const chk = document.createElement('div');
+    chk.className = 'detail';
+    chk.textContent = 'Checking…';
+    result.append(chk);
     try {
       const res = await fetch('https://sourcify.dev/server/v2/contract/' + chain + '/' + addr);
       if (res.ok) {
         const d = await res.json();
         const full = d.match === 'exact_match';
+        const partial = d.match === 'partial_match';
+        if (!full && !partial) { show('err', 'Unexpected response', 'Sourcify returned an unknown match type.'); return; }
         const label = full ? 'exact (full) match' : 'partial match';
         const repo = 'https://repo.sourcify.dev/contracts/' + (full ? 'full_match' : 'partial_match') + '/' + chain + '/' + addr + '/';
-        show('ok', '✓ Verified — ' + label,
-          'Verified ' + (d.verifiedAt ? new Date(d.verifiedAt).toISOString().slice(0, 10) : '') + '. ' +
-          '<a href="' + repo + '" target="_blank" rel="noopener noreferrer">View verified source →</a>');
+        const date = d.verifiedAt ? new Date(d.verifiedAt).toISOString().slice(0, 10) : '';
+        show('ok', '✓ Verified — ' + label, 'Verified ' + date + '.', { href: repo, text: 'View verified source →' });
       } else if (res.status === 404) {
-        show('warn', 'Not verified on this chain',
-          'No exact or partial match found. ' +
-          '<a href="https://verify.sourcify.dev" target="_blank" rel="noopener noreferrer">Verify it →</a>');
+        show('warn', 'Not verified on this chain', 'No exact or partial match found.', { href: 'https://verify.sourcify.dev', text: 'Verify it →' });
       } else {
         show('err', 'Error checking', 'Sourcify returned HTTP ' + res.status + '. Try again in a moment.');
       }
