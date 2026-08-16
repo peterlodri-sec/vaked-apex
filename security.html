@@ -31,7 +31,7 @@ footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--border);font-
   <li><strong>Open source</strong> — the full source is published in the <a href="https://github.com/peterlodri-sec/pocoo.vaked.dev" target="_blank" rel="noopener noreferrer">pocoo.vaked.dev repository</a>.</li>
   <li><strong>Source-verified</strong> — the deployed bytecode is verified as an <a href="https://repo.sourcify.dev/contracts/full_match/137/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A/" target="_blank" rel="noopener noreferrer">exact (full) match on Sourcify</a>.</li>
   <li><strong>Regression-tested</strong> — the mint, difficulty-adjustment, and supply logic is covered by Foundry and Hardhat test suites.</li>
-  <li><strong>Immutable after renounce</strong> — once ownership is renounced to the zero address, there is <em>no admin key, no pause, no upgrade path</em>. That is the point, and it is also a responsibility: the code must be right before that final step.</li>
+  <li><strong>Immutable</strong> — ownership is renounced to the zero address: there is <em>no admin key, no pause, no upgrade path</em>, and no way to change the contract, ever.</li>
 </ul>
 
 <h2>Responsible disclosure</h2>
