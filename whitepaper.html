@@ -77,7 +77,7 @@ market price.</p>
 
 <h2>3. Underlying technology</h2>
 <ul>
-  <li><strong>Standard</strong>: ERC-20 (fungible), deployed on Polygon PoS (EVM).</li>
+  <li><strong>Standard</strong>: ERC-20 (fungible), deployed on Polygon PoS (EVM) at <a href="https://polygonscan.com/address/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A">0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A</a>.</li>
   <li><strong>Minting</strong>: proof-of-work, EIP-918-style — miners find a
     <code>nonce</code> such that
     <code>keccak256(challengeNumber ‖ msg.sender ‖ nonce) &lt; miningTarget</code>.
@@ -104,7 +104,9 @@ market price.</p>
 </ul>
 <p>Ownership of the contract is renounced to the zero address after deployment,
 so the issuer cannot mint, pause, freeze, tax, or change the token afterward.
-Source is published and verified to match the deployed bytecode.</p>
+Source is published and verified to match the deployed bytecode on
+<a href="https://repo.sourcify.dev/contracts/full_match/137/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A/">Sourcify</a>
+and <a href="https://polygonscan.com/address/0x2Ae7DA713A2c8527AF70825C0F79632AF2e2ae4A">Polygonscan</a>.</p>
 <div class="fact">
   <strong>Verifiable on-chain.</strong> These are engineering facts, not
   promises: <code>owner() == address(0)</code>, no mint function beyond the PoW
@@ -150,7 +152,7 @@ Do not acquire VAKED with the expectation of profit; acquire it only to
 participate in the vaked.dev constellation.</p>
 
 <footer>
-  <p><a href="/">← vaked.dev</a> · VAKED whitepaper · v1.1 · 2026-08-15</p>
+  <p><a href="/">← vaked.dev</a> · VAKED whitepaper · v1.2 · 2026-08-16</p>
 </footer>
 </body>
 </html>
