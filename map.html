@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>constellation map — vaked.dev</title>
+<meta name="description" content="The constellation map — seventeen sovereign fleet nodes in one star field, each with a live status beacon. Self-hosted, self-owned, rendered in the open.">
+<meta name="theme-color" content="#04060a">
+<link rel="canonical" href="https://vaked.dev/map">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<style>
+  :root {
+    --bg: #04060a;
+    --panel: #0a0e14;
+    --teal: #2ff0e2;
+    --teal-glow: rgba(47, 240, 226, 0.25);
+    --teal-line: rgba(47, 240, 226, 0.2);
+    --gold: #e3b341;
+    --gold-glow: rgba(227, 179, 65, 0.2);
+    --dim: #7a8490;
+    --text: #e8edf2;
+    --line: rgba(122, 132, 144, 0.16);
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { height: 100%; }
+  body {
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(1200px 800px at 72% 18%, rgba(47, 240, 226, 0.045), transparent 62%),
+      radial-gradient(1000px 720px at 18% 82%, rgba(227, 179, 65, 0.035), transparent 60%),
+      radial-gradient(900px 600px at 50% 50%, rgba(88, 166, 255, 0.025), transparent 65%);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+    position: relative;
+  }
+
+  ::selection { background: rgba(47, 240, 226, 0.28); color: var(--text); }
+  :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 4px; }
+
+  a { color: var(--teal); text-decoration: none; }
+
+  /* ---------- starfield ---------- */
+  #sky {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---------- field ---------- */
+  .field {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+  }
+
+  #lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.5s ease 0.7s;
+  }
+  body.ready #lines { opacity: 1; }
+  #lines line {
+    stroke: rgba(47, 240, 226, 0.11);
+    stroke-width: 1;
+    transition: stroke 0.3s ease;
+  }
+  #lines line.hl { stroke: rgba(47, 240, 226, 0.5); }
+
+  /* ---------- nodes ---------- */
+  .node {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 12px));
+    transition:
+      opacity 0.8s ease var(--d, 0s),
+      transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s);
+  }
+  body.ready .node { opacity: 1; transform: translate(-50%, -50%); }
+
+  .node-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .star-wrap { position: relative; display: inline-flex; }
+  .node-star {
+    color: var(--teal);
+    font-size: 0.7rem;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(47, 240, 226, 0.5);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+  .node-link:hover .node-star {
+    color: #8ffbf3;
+    text-shadow: 0 0 16px rgba(47, 240, 226, 0.9);
+  }
+
+  .node-name {
+    font-family: var(--mono);
+    font-size: clamp(0.52rem, 1.05vw, 0.68rem);
+    letter-spacing: 0.04em;
+    color: #c6cdd6;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+  .node-link:hover .node-name { color: var(--teal); }
+
+  .node-status {
+    display: flex;
+    align-items: center;
+    gap: 0.32rem;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2a313a;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .dot[data-state="live"] {
+    background: var(--teal);
+    box-shadow: 0 0 8px rgba(47, 240, 226, 0.8);
+  }
+  .dot[data-state="down"] {
+    background: #5b6470;
+    box-shadow: none;
+  }
+  .label {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #5b6470;
+    min-width: 2.6em;
+    text-align: left;
+    transition: color 0.3s ease;
+  }
+  .node.is-live .label { color: var(--teal); }
+  .node.is-down .label { color: #5b6470; }
+
+  /* ---------- sovereign node (ocean · polygon full node) ---------- */
+  .node.sovereign .node-star {
+    color: var(--gold);
+    font-size: 0.9rem;
+    text-shadow:
+      0 0 14px rgba(227, 179, 65, 0.85),
+      0 0 32px rgba(47, 240, 226, 0.4);
+  }
+  .node.sovereign .node-link:hover .node-star {
+    color: #ffd98a;
+    text-shadow: 0 0 20px rgba(227, 179, 65, 1), 0 0 44px rgba(47, 240, 226, 0.55);
+  }
+  .node.sovereign .node-name { color: var(--text); }
+  .node.sovereign .node-link:hover .node-name { color: var(--gold); }
+  .node.sovereign .halo {
+    position: absolute;
+    inset: -14px;
+    border: 1px solid rgba(227, 179, 65, 0.4);
+    border-radius: 50%;
+    box-shadow:
+      0 0 22px rgba(227, 179, 65, 0.2),
+      0 0 46px rgba(47, 240, 226, 0.12),
+      inset 0 0 18px rgba(227, 179, 65, 0.08);
+    animation: breathe 3.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.16); opacity: 1; }
+  }
+  .node-note {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px dashed rgba(227, 179, 65, 0.35);
+    padding-bottom: 1px;
+    white-space: nowrap;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .node-note:hover { color: #ffd98a; border-bottom-color: rgba(227, 179, 65, 0.8); }
+
+  /* ---------- header ---------- */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.6rem 1.7rem;
+    background: linear-gradient(to bottom, rgba(4, 6, 10, 0.92), rgba(4, 6, 10, 0));
+    opacity: 0;
+    transition: opacity 0.9s ease 0.25s;
+  }
+  body.ready header { opacity: 1; }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--mono);
+    user-select: none;
+  }
+  .mark {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--teal);
+    font-size: 1.05rem;
+    line-height: 1;
+    padding: 4px;
+    text-shadow: 0 0 12px rgba(47, 240, 226, 0.6);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mark:hover { color: #8ffbf3; text-shadow: 0 0 18px rgba(47, 240, 226, 0.95); }
+  .brand-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .brand-name .dot { color: var(--teal); }
+  .brand-sub {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border: 1px solid var(--teal-line);
+    border-radius: 4px;
+    padding: 0.14rem 0.45rem;
+    background: rgba(47, 240, 226, 0.05);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  #summary b { color: var(--teal); font-weight: 600; }
+  .back { color: var(--dim); text-decoration: none; transition: color 0.2s ease; }
+  .back:hover { color: var(--teal); }
+
+  /* ---------- footer ---------- */
+  footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 5;
+    text-align: center;
+    padding: 2.4rem 1.5rem 1.3rem;
+    background: linear-gradient(to top, rgba(4, 6, 10, 0.94), rgba(4, 6, 10, 0));
+    opacity: 0;
+    transition: opacity 0.9s ease 0.45s;
+  }
+  body.ready footer { opacity: 1; }
+  .sig {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #59636f;
+  }
+  .sig .gold { color: var(--gold); opacity: 0.85; }
+
+  /* ---------- toast ---------- */
+  #toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translate(-50%, 12px);
+    z-index: 1000;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(10, 14, 20, 0.92);
+    border: 1px solid rgba(227, 179, 65, 0.4);
+    border-radius: 999px;
+    padding: 0.5rem 1.3rem;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(227, 179, 65, 0.12);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- the fine touch (4:20 · gold pulse) ---------- */
+  body.egg .node-star { color: var(--gold); }
+  body.egg .node.is-live .label { color: var(--gold); }
+  body.egg .dot[data-state="live"],
+  body.egg .dot[data-state="down"] {
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(227, 179, 65, 0.9);
+  }
+  body.egg .sovereign .halo {
+    border-color: rgba(227, 179, 65, 0.55);
+    box-shadow:
+      0 0 30px rgba(227, 179, 65, 0.35),
+      0 0 60px rgba(47, 240, 226, 0.2),
+      inset 0 0 18px rgba(227, 179, 65, 0.12);
+  }
+  body.egg #lines line { stroke: rgba(227, 179, 65, 0.28); }
+  body.egg #lines line.hl { stroke: rgba(227, 179, 65, 0.7); }
+  body.egg .node-star {
+    animation: goldPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes goldPulse {
+    0%, 100% { text-shadow: 0 0 4px rgba(227, 179, 65, 0.35); }
+    50% { text-shadow: 0 0 16px rgba(227, 179, 65, 0.95), 0 0 34px rgba(227, 179, 65, 0.4); }
+  }
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    body.ready .node,
+    body.ready header,
+    body.ready footer { opacity: 1; transform: none; }
+    .node {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+      transition: none;
+    }
+    header, footer, #lines, #toast { transition: none; }
+    body.ready header, body.ready footer { opacity: 1; }
+    #lines { opacity: 1; }
+    .node.sovereign .halo { animation: none; }
+    body.egg .node-star { animation: none; }
+  }
+
+  /* ---------- small screens ---------- */
+  @media (max-width: 640px) {
+    body { overflow: auto; }
+    .field { position: absolute; min-height: 100vh; }
+    header { padding: 0.8rem 1rem 1.2rem; }
+    .brand-sub { display: none; }
+    .header-right { gap: 0.8rem; }
+    footer { padding: 1.8rem 1rem 1rem; }
+    .sig { font-size: 0.55rem; letter-spacing: 0.14em; }
+    /* status conveyed by the dot alone · names stay visible */
+    .label { display: none; }
+    .node-note { display: none; }
+    .node { gap: 0.2rem; }
+    /* field children order: svg #lines, then the 17 .node divs (vaked, pocoo,
+       ocean, music, art, store, lovetta, worklog, proposal, axiomquant,
+       mlxquant, etherhive, bonfire, portail, transformers, design, cdn) */
+    .field > div:nth-of-type(9)  { left: 42% !important; top: 71% !important; } /* proposal   */
+    .field > div:nth-of-type(7)  { left: 63% !important; top: 80% !important; } /* lovetta    */
+    .field > div:nth-of-type(12) { left: 64% !important; top: 86% !important; } /* etherhive  */
+    .field > div:nth-of-type(13) { left: 84% !important; top: 92% !important; } /* bonfire    */
+    .field > div:nth-of-type(11) { left: 18% !important; top: 76% !important; } /* mlxquant   */
+    .field > div:nth-of-type(16) { left: 84% !important; }                      /* design     */
+    .field > div:nth-of-type(2)  { left: 58% !important; top: 39% !important; } /* pocoo      */
+    .field > div:nth-of-type(6)  { top: 62% !important; }                       /* store      */
+  }
+</style>
+</head>
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<header>
+  <div class="brand">
+    <button id="mark" class="mark" aria-label="✦" title="✦">✦</button>
+    <span class="brand-name">constellation<span class="dot">.</span>map</span>
+    <span class="brand-sub">vaked.dev</span>
+  </div>
+  <div class="header-right">
+    <span id="summary" role="status" aria-live="polite">17 nodes · probing…</span>
+    <a class="back" href="/" title="back to vaked.dev">← vaked.dev</a>
+  </div>
+</header>
+
+<main class="field" id="field" aria-label="constellation map — seventeen fleet nodes">
+
+  <svg id="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+  <!-- 00 · apex hub -->
+  <div class="node" style="--i:0; left:50%; top:52%;">
+    <a class="node-link" href="https://vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 01 · sovereign library -->
+  <div class="node" style="--i:1; left:62%; top:38%;">
+    <a class="node-link" href="https://pocoo.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">pocoo.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 02 · SOVEREIGN NODE · polygon full node -->
+  <div class="node sovereign" style="--i:2; left:79%; top:64%;">
+    <a class="node-link" href="https://ocean.vaked.dev" target="_blank" rel="noopener noreferrer" title="ocean.vaked.dev">
+      <span class="star-wrap">
+        <span class="halo" aria-hidden="true"></span>
+        <span class="node-star" aria-hidden="true">✦</span>
+      </span>
+      <span class="node-name">ocean.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+    <a class="node-note" href="https://ocean.vaked.dev/#polygon-node" target="_blank" rel="noopener noreferrer">polygon full node · live status</a>
+  </div>
+
+  <!-- 03 · 432hz sound -->
+  <div class="node" style="--i:3; left:35%; top:31%;">
+    <a class="node-link" href="https://music.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">music.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 04 · generative art -->
+  <div class="node" style="--i:4; left:21%; top:47%;">
+    <a class="node-link" href="https://art.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">art.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 05 · physical store -->
+  <div class="node" style="--i:5; left:37%; top:64%;">
+    <a class="node-link" href="https://store.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">store.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 06 · sovereign studio -->
+  <div class="node" style="--i:6; left:57%; top:79%;">
+    <a class="node-link" href="https://lovetta.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">lovetta.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 07 · fleet worklog -->
+  <div class="node" style="--i:7; left:70%; top:24%;">
+    <a class="node-link" href="https://worklog.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">worklog.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 08 · public discourse -->
+  <div class="node" style="--i:8; left:44%; top:83%;">
+    <a class="node-link" href="https://proposal.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">proposal.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 09 · mathematics -->
+  <div class="node" style="--i:9; left:14%; top:22%;">
+    <a class="node-link" href="https://axiomquant.org" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">axiomquant.org</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 10 · metal bitnet -->
+  <div class="node" style="--i:10; left:11%; top:67%;">
+    <a class="node-link" href="https://mlxquantlovefrom.com" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">mlxquantlovefrom.com</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 11 · etherhive -->
+  <div class="node" style="--i:11; left:65%; top:86%;">
+    <a class="node-link" href="https://etherhive.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">etherhive.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 12 · bonfire -->
+  <div class="node" style="--i:12; left:84%; top:87%;">
+    <a class="node-link" href="https://bonfire.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">bonfire.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 13 · sovereign gateway -->
+  <div class="node" style="--i:13; left:84%; top:17%;">
+    <a class="node-link" href="https://portail.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">portail.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 14 · transformers-ultra -->
+  <div class="node" style="--i:14; left:26%; top:11%;">
+    <a class="node-link" href="https://transformers.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">transformers.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 15 · design -->
+  <div class="node" style="--i:15; left:89%; top:42%;">
+    <a class="node-link" href="https://design.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">design.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+  <!-- 16 · cdn -->
+  <div class="node" style="--i:16; left:57%; top:11%;">
+    <a class="node-link" href="https://cdn.vaked.dev" target="_blank" rel="noopener noreferrer">
+      <span class="star-wrap"><span class="node-star" aria-hidden="true">✦</span></span>
+      <span class="node-name">cdn.vaked.dev</span>
+      <span class="node-status"><span class="dot"></span><span class="label">…</span></span>
+    </a>
+  </div>
+
+</main>
+
+<footer role="contentinfo">
+  <div class="sig">the constellation · <span class="gold">0 + 1</span> · fine touch from within · vaked.dev</div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite">4:20 · the fine touch</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- starfield ---------- */
+  (function () {
+    var canvas = document.getElementById('sky');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W = 0, H = 0, stars = [];
+    function size() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    window.addEventListener('resize', size);
+    size();
+    var count = Math.min(70, Math.floor((W * H) / 16000));
+    var palette = ['rgba(47,240,226,ALPHA)', 'rgba(227,179,65,ALPHA)', 'rgba(88,166,255,ALPHA)', 'rgba(255,255,255,ALPHA)'];
+    for (var i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.1 + 0.3,
+        base: Math.random() * 0.32 + 0.1,
+        tw: Math.random() * 0.02 + 0.004,
+        ph: Math.random() * Math.PI * 2,
+        c: palette[(Math.random() * palette.length) | 0]
+      });
+    }
+    function draw(t) {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        s.y -= 0.015;
+        if (s.y < -2) { s.y = H + 2; s.x = Math.random() * W; }
+        var a = s.base + Math.sin(t * s.tw + s.ph) * 0.3 * s.base;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 6.2832);
+        ctx.fillStyle = s.c.replace('ALPHA', Math.max(0.03, a).toFixed(3));
+        ctx.fill();
+      }
+    }
+    if (!reduced) {
+      (function loop(t) { draw(t || 0); requestAnimationFrame(loop); })();
+    } else {
+      draw(0);
+    }
+  })();
+
+  var field = document.getElementById('field');
+  var NODES = Array.prototype.slice.call(field.querySelectorAll('.node'));
+  var svg = document.getElementById('lines');
+
+  /* ---------- constellation lines ---------- */
+  var EDGES = [
+    [0, 1], [0, 3], [0, 4], [0, 5], [0, 7], [0, 13], [0, 15],
+    [2, 0], [2, 7], [2, 11], [2, 12], [2, 13], [2, 14], [2, 16],
+    [1, 7], [1, 8],
+    [3, 4], [3, 6],
+    [4, 6], [4, 5], [4, 15],
+    [5, 6], [5, 16],
+    [9, 10], [9, 14], [10, 14],
+    [11, 12],
+    [13, 16]
+  ];
+  var NS = 'http://www.w3.org/2000/svg';
+  var lines = [];
+  if (svg) {
+    EDGES.forEach(function (pair) {
+      var a = NODES[pair[0]], b = NODES[pair[1]];
+      var line = document.createElementNS(NS, 'line');
+      line.setAttribute('x1', parseFloat(a.style.left));
+      line.setAttribute('y1', parseFloat(a.style.top));
+      line.setAttribute('x2', parseFloat(b.style.left));
+      line.setAttribute('y2', parseFloat(b.style.top));
+      line.setAttribute('vector-effect', 'non-scaling-stroke');
+      svg.appendChild(line);
+      lines.push({ a: pair[0], b: pair[1], el: line });
+    });
+  }
+  var adj = {};
+  EDGES.forEach(function (p) {
+    (adj[p[0]] = adj[p[0]] || []).push(p[1]);
+    (adj[p[1]] = adj[p[1]] || []).push(p[0]);
+  });
+  NODES.forEach(function (n, i) {
+    n.addEventListener('mouseenter', function () {
+      lines.forEach(function (l) { if (l.a === i || l.b === i) l.el.classList.add('hl'); });
+    });
+    n.addEventListener('mouseleave', function () {
+      lines.forEach(function (l) { l.el.classList.remove('hl'); });
+    });
+  });
+
+  /* ---------- live status · favicon probe (CORS-free, no backend) ---------- */
+  var PROBE_PATHS = ['/favicon.ico', '/favicon.svg', '/apple-touch-icon.png'];
+  var pending = NODES.length, live = 0, down = 0;
+
+  function probeNode(n) {
+    var link = n.querySelector('.node-link');
+    var origin = new URL(link.getAttribute('href'), location.href).origin;
+    var dot = n.querySelector('.dot');
+    var label = n.querySelector('.label');
+    var settled = false;
+    function settle(state) {
+      if (settled) return;
+      settled = true;
+      dot.setAttribute('data-state', state);
+      label.textContent = state;
+      n.classList.add(state === 'live' ? 'is-live' : 'is-down');
+      if (state === 'live') live++; else down++;
+      pending--;
+      if (pending === 0) renderSummary();
+    }
+    function tryPath(idx) {
+      if (idx >= PROBE_PATHS.length) { settle('down'); return; }
+      var img = new Image();
+      img.onload = function () { settle('live'); };
+      img.onerror = function () { tryPath(idx + 1); };
+      img.src = origin + PROBE_PATHS[idx];
+    }
+    tryPath(0);
+  }
+
+  function renderSummary() {
+    var s = document.getElementById('summary');
+    s.innerHTML = NODES.length + ' nodes · <b>' + live + '</b> live · <b>' + down + '</b> down';
+  }
+
+  NODES.forEach(probeNode);
+
+  /* re-probe when the tab regains focus — status stays honest */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) return;
+    NODES.forEach(function (n) {
+      n.classList.remove('is-live', 'is-down');
+      n.querySelector('.dot').removeAttribute('data-state');
+      n.querySelector('.label').textContent = '…';
+    });
+    pending = NODES.length; live = 0; down = 0;
+    document.getElementById('summary').textContent = NODES.length + ' nodes · probing…';
+    NODES.forEach(probeNode);
+  });
+
+  /* ---------- the fine touch · 4:20 ---------- */
+  var toast = document.getElementById('toast');
+  var toastTimer = null;
+
+  function showToast() {
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 4500);
+  }
+
+  function triggerFineTouch() {
+    document.body.classList.remove('egg');
+    void document.body.offsetWidth; /* restart the pulse cleanly */
+    document.body.classList.add('egg');
+    clearTimeout(triggerFineTouch._t);
+    triggerFineTouch._t = setTimeout(function () {
+      document.body.classList.remove('egg');
+    }, 15000);
+    showToast();
+  }
+
+  /* the clock path */
+  var firedDay = null;
+  function checkClock() {
+    var d = new Date();
+    var day = d.toDateString();
+    if (firedDay !== day && d.getHours() === 4 && d.getMinutes() === 20) {
+      firedDay = day;
+      triggerFineTouch();
+    }
+  }
+  setInterval(checkClock, 10000);
+  checkClock();
+
+  /* the click path · five quick clicks on the ✦ */
+  var mark = document.getElementById('mark');
+  var clicks = [];
+  if (mark) {
+    mark.addEventListener('click', function () {
+      var now = Date.now();
+      clicks = clicks.filter(function (t) { return now - t < 2500; });
+      clicks.push(now);
+      if (clicks.length >= 5) { clicks = []; triggerFineTouch(); }
+    });
+  }
+
+  /* ---------- orchestrated load-in ---------- */
+  window.addEventListener('load', function () {
+    document.body.classList.add('ready');
+  });
+})();
+</script>
+
+</body>
+</html>
